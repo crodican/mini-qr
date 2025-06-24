@@ -1,0 +1,1004 @@
+<html lang="en" data-kantu="1">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="The simplest way to create and scan QR codes. Design beautiful QR codes in just a few clicks, and scan codes instantly. Perfect for everyone, from beginners to professionals.">
+    <meta name="keywords" content="QR code, easy generator, simple scanner, beginner-friendly, custom, design, QR code creator, QR code maker">
+    <meta name="author" content="Estee Tey">
+    <meta property="og:title" content="Mini QR Code Generator">
+    <meta property="og:description" content="The simplest way to create and scan QR codes. Design beautiful QR codes in just a few clicks, and scan codes instantly. Perfect for everyone, from beginners to professionals.">
+    <meta property="og:image" content="https://github.com/lyqht/styled-qr-code-generator/blob/main/public/og_image.png?raw=true">
+    <meta property="og:url" content="https://mini-qr-code-generator.vercel.app/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mini QR Code Generator">
+    <meta name="twitter:description" content="The simplest way to create and scan QR codes. Design beautiful QR codes in just a few clicks, and scan codes instantly. Perfect for everyone, from beginners to professionals.">
+    <meta name="twitter:image" content="https://github.com/lyqht/mini-qr-code-generator/blob/main/public/og_image.png?raw=true">
+    <meta name="twitter:site" content="@estee_tey">
+    <meta name="license" content="GNU General Public License v3.0">
+    <meta name="color-scheme" content="dark light">
+    <script async="" src="https://www.clarity.ms/s/0.8.13-beta/clarity.js"></script>
+    <script async="" src="https://www.clarity.ms/tag/kgzmgcsk9w"></script>
+    <script type="text/javascript">
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () {
+                (c[a].q = c[a].q || []).push(arguments)
+            };
+            t = l.createElement(r);
+            t.async = 1;
+            t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0];
+            y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "kgzmgcsk9w");
+    </script>
+    <title>Mini QR Code Generator</title>
+    <script type="module" crossorigin="" src="/assets/index-ClDhGsLh.js"></script>
+    <link rel="stylesheet" crossorigin="" href="/assets/index-DrmqVIyw.css">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <style>
+        [data-vaul-drawer] {
+            touch-action: none;
+            will-change: transform;
+            transition: transform .5s cubic-bezier(.32, .72, 0, 1);
+            animation-duration: .5s;
+            animation-timing-function: cubic-bezier(.32, .72, 0, 1)
+        }
+        
+        [data-vaul-drawer][data-vaul-snap-points=false][data-vaul-drawer-direction=bottom][data-state=open] {
+            animation-name: slideFromBottom
+        }
+        
+        [data-vaul-drawer][data-vaul-snap-points=false][data-vaul-drawer-direction=bottom][data-state=closed] {
+            animation-name: slideToBottom
+        }
+        
+        [data-vaul-drawer][data-vaul-snap-points=false][data-vaul-drawer-direction=top][data-state=open] {
+            animation-name: slideFromTop
+        }
+        
+        [data-vaul-drawer][data-vaul-snap-points=false][data-vaul-drawer-direction=top][data-state=closed] {
+            animation-name: slideToTop
+        }
+        
+        [data-vaul-drawer][data-vaul-snap-points=false][data-vaul-drawer-direction=left][data-state=open] {
+            animation-name: slideFromLeft
+        }
+        
+        [data-vaul-drawer][data-vaul-snap-points=false][data-vaul-drawer-direction=left][data-state=closed] {
+            animation-name: slideToLeft
+        }
+        
+        [data-vaul-drawer][data-vaul-snap-points=false][data-vaul-drawer-direction=right][data-state=open] {
+            animation-name: slideFromRight
+        }
+        
+        [data-vaul-drawer][data-vaul-snap-points=false][data-vaul-drawer-direction=right][data-state=closed] {
+            animation-name: slideToRight
+        }
+        
+        [data-vaul-drawer][data-vaul-snap-points=true][data-vaul-drawer-direction=bottom] {
+            transform: translate3d(0, var(--initial-transform, 100%), 0)
+        }
+        
+        [data-vaul-drawer][data-vaul-snap-points=true][data-vaul-drawer-direction=top] {
+            transform: translate3d(0, calc(var(--initial-transform, 100%) * -1), 0)
+        }
+        
+        [data-vaul-drawer][data-vaul-snap-points=true][data-vaul-drawer-direction=left] {
+            transform: translate3d(calc(var(--initial-transform, 100%) * -1), 0, 0)
+        }
+        
+        [data-vaul-drawer][data-vaul-snap-points=true][data-vaul-drawer-direction=right] {
+            transform: translate3d(var(--initial-transform, 100%), 0, 0)
+        }
+        
+        [data-vaul-drawer][data-vaul-delayed-snap-points=true][data-vaul-drawer-direction=top],
+        [data-vaul-drawer][data-vaul-delayed-snap-points=true][data-vaul-drawer-direction=bottom] {
+            transform: translate3d(0, var(--snap-point-height, 0), 0)
+        }
+        
+        [data-vaul-drawer][data-vaul-delayed-snap-points=true][data-vaul-drawer-direction=left],
+        [data-vaul-drawer][data-vaul-delayed-snap-points=true][data-vaul-drawer-direction=right] {
+            transform: translate3d(var(--snap-point-height, 0), 0, 0)
+        }
+        
+        [data-vaul-overlay][data-vaul-snap-points=false] {
+            animation-duration: .5s;
+            animation-timing-function: cubic-bezier(.32, .72, 0, 1)
+        }
+        
+        [data-vaul-overlay][data-vaul-snap-points=false][data-state=open] {
+            animation-name: fadeIn
+        }
+        
+        [data-vaul-overlay][data-state=closed] {
+            animation-name: fadeOut
+        }
+        
+        [data-vaul-animate=false] {
+            animation: none!important
+        }
+        
+        [data-vaul-overlay][data-vaul-snap-points=true] {
+            opacity: 0;
+            transition: opacity .5s cubic-bezier(.32, .72, 0, 1)
+        }
+        
+        [data-vaul-overlay][data-vaul-snap-points=true] {
+            opacity: 1
+        }
+        
+        [data-vaul-drawer]:not([data-vaul-custom-container=true]):after {
+            content: "";
+            position: absolute;
+            background: inherit;
+            background-color: inherit
+        }
+        
+        [data-vaul-drawer][data-vaul-drawer-direction=top]:after {
+            top: initial;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            height: 200%
+        }
+        
+        [data-vaul-drawer][data-vaul-drawer-direction=bottom]:after {
+            top: 100%;
+            bottom: initial;
+            left: 0;
+            right: 0;
+            height: 200%
+        }
+        
+        [data-vaul-drawer][data-vaul-drawer-direction=left]:after {
+            left: initial;
+            right: 100%;
+            top: 0;
+            bottom: 0;
+            width: 200%
+        }
+        
+        [data-vaul-drawer][data-vaul-drawer-direction=right]:after {
+            left: 100%;
+            right: initial;
+            top: 0;
+            bottom: 0;
+            width: 200%
+        }
+        
+        [data-vaul-overlay][data-vaul-snap-points=true]:not([data-vaul-snap-points-overlay=true]):not([data-state=closed]) {
+            opacity: 0
+        }
+        
+        [data-vaul-overlay][data-vaul-snap-points-overlay=true] {
+            opacity: 1
+        }
+        
+        [data-vaul-handle] {
+            display: block;
+            position: relative;
+            opacity: .7;
+            background: #e2e2e4;
+            margin-left: auto;
+            margin-right: auto;
+            height: 5px;
+            width: 32px;
+            border-radius: 1rem;
+            touch-action: pan-y
+        }
+        
+        [data-vaul-handle]:hover,
+        [data-vaul-handle]:active {
+            opacity: 1
+        }
+        
+        [data-vaul-handle-hitarea] {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: max(100%, 2.75rem);
+            height: max(100%, 2.75rem);
+            touch-action: inherit
+        }
+        
+        @media (hover: hover) and (pointer: fine) {
+            [data-vaul-drawer] {
+                -webkit-user-select: none;
+                user-select: none
+            }
+        }
+        
+        @media (pointer: fine) {
+            [data-vaul-handle-hitarea]: {
+                width: 100%;
+                height: 100%
+            }
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0
+            }
+            to {
+                opacity: 1
+            }
+        }
+        
+        @keyframes fadeOut {
+            to {
+                opacity: 0
+            }
+        }
+        
+        @keyframes slideFromBottom {
+            0% {
+                transform: translate3d(0, var(--initial-transform, 100%), 0)
+            }
+            to {
+                transform: translateZ(0)
+            }
+        }
+        
+        @keyframes slideToBottom {
+            to {
+                transform: translate3d(0, var(--initial-transform, 100%), 0)
+            }
+        }
+        
+        @keyframes slideFromTop {
+            0% {
+                transform: translate3d(0, calc(var(--initial-transform, 100%) * -1), 0)
+            }
+            to {
+                transform: translateZ(0)
+            }
+        }
+        
+        @keyframes slideToTop {
+            to {
+                transform: translate3d(0, calc(var(--initial-transform, 100%) * -1), 0)
+            }
+        }
+        
+        @keyframes slideFromLeft {
+            0% {
+                transform: translate3d(calc(var(--initial-transform, 100%) * -1), 0, 0)
+            }
+            to {
+                transform: translateZ(0)
+            }
+        }
+        
+        @keyframes slideToLeft {
+            to {
+                transform: translate3d(calc(var(--initial-transform, 100%) * -1), 0, 0)
+            }
+        }
+        
+        @keyframes slideFromRight {
+            0% {
+                transform: translate3d(var(--initial-transform, 100%), 0, 0)
+            }
+            to {
+                transform: translateZ(0)
+            }
+        }
+        
+        @keyframes slideToRight {
+            to {
+                transform: translate3d(var(--initial-transform, 100%), 0, 0)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" data-v-app="">
+        <main data-v-e6bd2785="">
+            <div data-v-e6bd2785="" class="hidden md:mx-auto md:mb-4 md:mt-8 md:flex md:w-5/6 md:flex-row md:justify-between md:ps-4">
+                <div data-v-e6bd2785="" class="flex items-center">
+                    <h1 data-v-e6bd2785="" class="text-3xl text-gray-700 dark:text-gray-100">MiniQR</h1>
+                    <div data-v-e6bd2785="" class="ml-4 flex items-center gap-1 rounded-lg border border-zinc-300 bg-zinc-100 p-1 dark:border-zinc-700 dark:bg-zinc-800">
+                        <button data-v-e6bd2785="" class="flex items-center gap-1 rounded-md px-2 py-1 text-sm outline-none transition-colors focus-visible:ring-1 focus-visible:ring-zinc-700 dark:focus-visible:ring-zinc-200 md:gap-2 md:px-3 md:py-1.5 md:text-base bg-white text-zinc-900 shadow dark:bg-zinc-700 dark:text-zinc-100" aria-label="Switch to Create Mode">
+                            <svg data-v-e6bd2785="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                                <path data-v-e6bd2785="" fill="currentColor" d="M3 11h8V3H3zm2-6h4v4H5zM3 21h8v-8H3zm2-6h4v4H5zm8-12v8h8V3zm6 6h-4V5h4zm-6 12h8v-8h-8zm2-6h4v4h-4z"></path>
+                            </svg><span data-v-e6bd2785="">Create</span></button>
+                        <button data-v-e6bd2785="" class="flex items-center gap-1 rounded-md px-2 py-1 text-sm outline-none transition-colors focus-visible:ring-1 focus-visible:ring-zinc-700 dark:focus-visible:ring-zinc-200 md:gap-2 md:px-3 md:py-1.5 md:text-base text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100" aria-label="Switch to Scan Mode">
+                            <svg data-v-e6bd2785="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                                <path data-v-e6bd2785="" fill="currentColor" d="M12 9a3 3 0 1 0 0 6a3 3 0 0 0 0-6m0 8a5 5 0 1 1 0-10a5 5 0 0 1 0 10m0-12a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m4.5 1.5a1.5 1.5 0 0 1 1.5 1.5a1.5 1.5 0 0 1-1.5 1.5a1.5 1.5 0 0 1-1.5-1.5a1.5 1.5 0 0 1 1.5-1.5M20 4h-3.17l-1.24-1.35A1.99 1.99 0 0 0 14.12 2H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2"></path>
+                            </svg><span data-v-e6bd2785="">Scan</span></button>
+                    </div>
+                </div>
+                <div data-v-e6bd2785="" class="flex items-center justify-end gap-2">
+                    <a data-v-e6bd2785="" class="icon-button" href="https://github.com/lyqht/mini-qr" target="_blank" aria-label="GitHub repository for this project">
+                        <svg data-v-e6bd2785="" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                            <path data-v-e6bd2785="" fill="#abcbca" d="M12.001 2c-5.525 0-10 4.475-10 10a9.994 9.994 0 0 0 6.837 9.488c.5.087.688-.213.688-.476c0-.237-.013-1.024-.013-1.862c-2.512.463-3.162-.612-3.362-1.175c-.113-.288-.6-1.175-1.025-1.413c-.35-.187-.85-.65-.013-.662c.788-.013 1.35.725 1.538 1.025c.9 1.512 2.337 1.087 2.912.825c.088-.65.35-1.087.638-1.337c-2.225-.25-4.55-1.113-4.55-4.938c0-1.088.387-1.987 1.025-2.688c-.1-.25-.45-1.275.1-2.65c0 0 .837-.262 2.75 1.026a9.28 9.28 0 0 1 2.5-.338c.85 0 1.7.112 2.5.337c1.913-1.3 2.75-1.024 2.75-1.024c.55 1.375.2 2.4.1 2.65c.637.7 1.025 1.587 1.025 2.687c0 3.838-2.337 4.688-4.563 4.938c.363.312.676.912.676 1.85c0 1.337-.013 2.412-.013 2.75c0 .262.188.574.688.474A10.016 10.016 0 0 0 22 12c0-5.525-4.475-10-10-10Z"></path>
+                        </svg>
+                    </a>
+                    <button data-v-e6bd2785="" class="icon-button" aria-label="Toggle dark mode"><span data-v-e6bd2785=""><svg data-v-e6bd2785="" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><g data-v-e6bd2785="" fill="#abcabc"><path data-v-e6bd2785="" d="M12 16a4 4 0 0 0 0-8z"></path><path data-v-e6bd2785="" fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10s10-4.477 10-10S17.523 2 12 2m0 2v4a4 4 0 1 0 0 8v4a8 8 0 1 0 0-16" clip-rule="evenodd"></path></g></svg></span></button>
+                    <button class="whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-fit flex gap-2 items-center justify-between focus-visible:ring-1 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100" role="combobox" aria-expanded="false" aria-label="Select language" type="button" aria-haspopup="dialog" aria-controls="" data-state="closed">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon -ml-1.5 size-6 shrink-0" width="36" height="36" viewBox="0 0 24 24">
+                            <g fill="none" stroke="#abcbca" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M4 5h7M7 4c0 4.846 0 7 .5 8"></path>
+                                <path d="M10 8.5c0 2.286-2 4.5-3.5 4.5S4 11.865 4 11c0-2 1-3 3-3s5 .57 5 2.857c0 1.524-.667 2.571-2 3.143m2 6l4-9l4 9m-.9-2h-6.2"></path>
+                            </g>
+                        </svg> English
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-up-down-icon size-4 shrink-0 opacity-50">
+                            <path d="m7 15 5 5 5-5"></path>
+                            <path d="m7 9 5-5 5 5"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div data-v-e6bd2785="" class="scroll-header-container fixed inset-x-0 top-0 z-50 md:hidden">
+                <div data-v-e6bd2785="" class="flex justify-center">
+                    <div data-v-e6bd2785="" class="relative flex items-center gap-1 rounded-lg border border-zinc-300 bg-zinc-100 p-1 shadow-lg transition-all duration-300 dark:border-zinc-700 dark:bg-zinc-800 dark:shadow-slate-800">
+                        <button data-v-e6bd2785="" class="flex items-center gap-1 rounded-md px-2 py-1 text-sm outline-none transition-colors focus-visible:ring-1 focus-visible:ring-zinc-700 dark:focus-visible:ring-zinc-200 bg-white text-zinc-900 shadow dark:bg-zinc-700 dark:text-zinc-100 py-1 text-sm" aria-label="Switch to Create Mode">
+                            <svg data-v-e6bd2785="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                                <path data-v-e6bd2785="" fill="currentColor" d="M3 11h8V3H3zm2-6h4v4H5zM3 21h8v-8H3zm2-6h4v4H5zm8-12v8h8V3zm6 6h-4V5h4zm-6 12h8v-8h-8zm2-6h4v4h-4z"></path>
+                            </svg><span data-v-e6bd2785="">Create</span></button>
+                        <button data-v-e6bd2785="" class="flex items-center gap-1 rounded-md px-2 py-1 text-sm outline-none transition-colors focus-visible:ring-1 focus-visible:ring-zinc-700 dark:focus-visible:ring-zinc-200 text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 py-1 text-sm" aria-label="Switch to Scan Mode">
+                            <svg data-v-e6bd2785="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                                <path data-v-e6bd2785="" fill="currentColor" d="M12 9a3 3 0 1 0 0 6a3 3 0 0 0 0-6m0 8a5 5 0 1 1 0-10a5 5 0 0 1 0 10m0-12a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m4.5 1.5a1.5 1.5 0 0 1 1.5 1.5a1.5 1.5 0 0 1-1.5 1.5a1.5 1.5 0 0 1-1.5-1.5a1.5 1.5 0 0 1 1.5-1.5M20 4h-3.17l-1.24-1.35A1.99 1.99 0 0 0 14.12 2H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2"></path>
+                            </svg><span data-v-e6bd2785="">Scan</span></button>
+                        <div data-v-e6bd2785="" class="transition-opacity duration-300">
+                            <button class="flex size-9 items-center justify-center rounded-md border border-zinc-300 bg-zinc-100 text-zinc-800 outline-none hover:bg-zinc-200 focus-visible:ring-1 focus-visible:ring-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 dark:focus-visible:ring-zinc-200" aria-label="Menu" aria-haspopup="true" aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M3 18h18v-2H3zm0-5h18v-2H3zm0-5h18V6H3z"></path>
+                                </svg>
+                            </button>
+                            <!---->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-v-e6bd2785="" class="relative grid min-h-screen place-items-center items-start bg-white p-8 pt-16 dark:bg-zinc-900 md:px-6 md:pt-8">
+                <div data-v-e6bd2785="" class="w-full lg:w-5/6">
+                    <div data-v-e6bd2785="">
+                        <div class="flex items-start justify-center gap-4 md:flex-row md:gap-6 lg:gap-12 lg:pb-0" style="padding-bottom: 0px;">
+                            <div id="main-content-container" class="sticky top-0 flex w-full shrink-0 flex-col items-center justify-center p-4 md:w-fit">
+                                <div id="main-content">
+                                    <div id="qr-code-container" class="grid origin-center place-items-center">
+                                        <div id="element-to-export" class="grid place-items-center overflow-hidden" style="border-radius: 24px; background: rgb(105, 125, 128); width: 200px; height: 200px;">
+                                            <div class="flex items-center justify-center" role="img" aria-label="QR code">
+                                                <div class="flex items-center justify-center">
+                                                    <svg width="200" height="200" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200">
+                                                        <defs>
+                                                            <clipPath id="clip-path-background-color-5">
+                                                                <rect x="0" y="0" width="200" height="200"></rect>
+                                                            </clipPath>
+                                                            <clipPath id="clip-path-dot-color-5">
+                                                                <path d="M 67 13v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,70,16)"></path>
+                                                                <path d="M 85 13v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,88,16)"></path>
+                                                                <path d="M 121 13v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,124,16)"></path>
+                                                                <path d="M 133 13v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,136,16)"></path>
+                                                                <path d="M 61 19v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,64,22)"></path>
+                                                                <path d="M 67 19v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,70,22)"></path>
+                                                                <path d="M 79 19v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,82,22)"></path>
+                                                                <rect x="85" y="19" width="6" height="6" transform="rotate(0,88,22)"></rect>
+                                                                <rect x="91" y="19" width="6" height="6" transform="rotate(0,94,22)"></rect>
+                                                                <path d="M 97 19v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,100,22)"></path>
+                                                                <path d="M 115 19v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,118,22)"></path>
+                                                                <rect x="121" y="19" width="6" height="6" transform="rotate(0,124,22)"></rect>
+                                                                <rect x="127" y="19" width="6" height="6" transform="rotate(0,130,22)"></rect>
+                                                                <rect x="133" y="19" width="6" height="6" transform="rotate(0,136,22)"></rect>
+                                                                <path d="M 61 25v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,64,28)"></path>
+                                                                <rect x="85" y="25" width="6" height="6" transform="rotate(0,88,28)"></rect>
+                                                                <rect x="91" y="25" width="6" height="6" transform="rotate(0,94,28)"></rect>
+                                                                <circle cx="106" cy="28" r="3" transform="rotate(0,106,28)"></circle>
+                                                                <rect x="133" y="25" width="6" height="6" transform="rotate(0,136,28)"></rect>
+                                                                <circle cx="70" cy="34" r="3" transform="rotate(0,70,34)"></circle>
+                                                                <path d="M 79 31v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,82,34)"></path>
+                                                                <rect x="85" y="31" width="6" height="6" transform="rotate(0,88,34)"></rect>
+                                                                <rect x="91" y="31" width="6" height="6" transform="rotate(0,94,34)"></rect>
+                                                                <path d="M 97 31v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,100,34)"></path>
+                                                                <path d="M 109 31v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,112,34)"></path>
+                                                                <path d="M 115 31v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,118,34)"></path>
+                                                                <path d="M 127 31v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,130,34)"></path>
+                                                                <path d="M 133 31v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,136,34)"></path>
+                                                                <path d="M 73 37v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,76,40)"></path>
+                                                                <rect x="79" y="37" width="6" height="6" transform="rotate(0,82,40)"></rect>
+                                                                <rect x="85" y="37" width="6" height="6" transform="rotate(0,88,40)"></rect>
+                                                                <rect x="91" y="37" width="6" height="6" transform="rotate(0,94,40)"></rect>
+                                                                <rect x="97" y="37" width="6" height="6" transform="rotate(0,100,40)"></rect>
+                                                                <path d="M 103 37v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,106,40)"></path>
+                                                                <path d="M 115 37v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,118,40)"></path>
+                                                                <rect x="127" y="37" width="6" height="6" transform="rotate(0,130,40)"></rect>
+                                                                <path d="M 67 43v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,70,46)"></path>
+                                                                <rect x="73" y="43" width="6" height="6" transform="rotate(0,76,46)"></rect>
+                                                                <rect x="85" y="43" width="6" height="6" transform="rotate(0,88,46)"></rect>
+                                                                <rect x="97" y="43" width="6" height="6" transform="rotate(0,100,46)"></rect>
+                                                                <path d="M 127 43v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(180,130,46)"></path>
+                                                                <path d="M 133 43v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,136,46)"></path>
+                                                                <circle cx="64" cy="52" r="3" transform="rotate(0,64,52)"></circle>
+                                                                <path d="M 73 49v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,76,52)"></path>
+                                                                <rect x="85" y="49" width="6" height="6" transform="rotate(0,88,52)"></rect>
+                                                                <rect x="97" y="49" width="6" height="6" transform="rotate(0,100,52)"></rect>
+                                                                <circle cx="112" cy="52" r="3" transform="rotate(0,112,52)"></circle>
+                                                                <path d="M 121 49v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,124,52)"></path>
+                                                                <rect x="133" y="49" width="6" height="6" transform="rotate(0,136,52)"></rect>
+                                                                <path d="M 79 55v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,82,58)"></path>
+                                                                <path d="M 85 55v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,88,58)"></path>
+                                                                <rect x="97" y="55" width="6" height="6" transform="rotate(0,100,58)"></rect>
+                                                                <path d="M 115 55v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,118,58)"></path>
+                                                                <path d="M 121 55v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,124,58)"></path>
+                                                                <rect x="133" y="55" width="6" height="6" transform="rotate(0,136,58)"></rect>
+                                                                <path d="M 19 61v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,22,64)"></path>
+                                                                <rect x="25" y="61" width="6" height="6" transform="rotate(0,28,64)"></rect>
+                                                                <path d="M 31 61v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,34,64)"></path>
+                                                                <path d="M 43 61v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,46,64)"></path>
+                                                                <path d="M 49 61v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,52,64)"></path>
+                                                                <path d="M 91 61v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,94,64)"></path>
+                                                                <rect x="97" y="61" width="6" height="6" transform="rotate(0,100,64)"></rect>
+                                                                <path d="M 133 61v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,136,64)"></path>
+                                                                <path d="M 169 61v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,172,64)"></path>
+                                                                <path d="M 175 61v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,178,64)"></path>
+                                                                <path d="M 19 67v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(180,22,70)"></path>
+                                                                <rect x="25" y="67" width="6" height="6" transform="rotate(0,28,70)"></rect>
+                                                                <rect x="31" y="67" width="6" height="6" transform="rotate(0,34,70)"></rect>
+                                                                <path d="M 37 67v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,40,70)"></path>
+                                                                <path d="M 61 67v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,64,70)"></path>
+                                                                <path d="M 67 67v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,70,70)"></path>
+                                                                <path d="M 79 67v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,82,70)"></path>
+                                                                <path d="M 85 67v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,88,70)"></path>
+                                                                <path d="M 97 67v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(180,100,70)"></path>
+                                                                <rect x="103" y="67" width="6" height="6" transform="rotate(0,106,70)"></rect>
+                                                                <rect x="109" y="67" width="6" height="6" transform="rotate(0,112,70)"></rect>
+                                                                <path d="M 115 67v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,118,70)"></path>
+                                                                <path d="M 139 67v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,142,70)"></path>
+                                                                <rect x="145" y="67" width="6" height="6" transform="rotate(0,148,70)"></rect>
+                                                                <rect x="151" y="67" width="6" height="6" transform="rotate(0,154,70)"></rect>
+                                                                <rect x="157" y="67" width="6" height="6" transform="rotate(0,160,70)"></rect>
+                                                                <rect x="163" y="67" width="6" height="6" transform="rotate(0,166,70)"></rect>
+                                                                <rect x="169" y="67" width="6" height="6" transform="rotate(0,172,70)"></rect>
+                                                                <circle cx="184" cy="70" r="3" transform="rotate(0,184,70)"></circle>
+                                                                <circle cx="16" cy="76" r="3" transform="rotate(0,16,76)"></circle>
+                                                                <path d="M 49 73v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,52,76)"></path>
+                                                                <rect x="55" y="73" width="6" height="6" transform="rotate(0,58,76)"></rect>
+                                                                <rect x="61" y="73" width="6" height="6" transform="rotate(0,64,76)"></rect>
+                                                                <path d="M 67 73v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,70,76)"></path>
+                                                                <path d="M 145 73v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,148,76)"></path>
+                                                                <rect x="163" y="73" width="6" height="6" transform="rotate(0,166,76)"></rect>
+                                                                <rect x="169" y="73" width="6" height="6" transform="rotate(0,172,76)"></rect>
+                                                                <path d="M 175 73v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,178,76)"></path>
+                                                                <path d="M 25 79v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,28,82)"></path>
+                                                                <path d="M 31 79v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,34,82)"></path>
+                                                                <path d="M 55 79v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,58,82)"></path>
+                                                                <circle cx="130" cy="82" r="3" transform="rotate(0,130,82)"></circle>
+                                                                <path d="M 163 79v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,166,82)"></path>
+                                                                <path d="M 181 79v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,184,82)"></path>
+                                                                <path d="M 13 85v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,16,88)"></path>
+                                                                <rect x="19" y="85" width="6" height="6" transform="rotate(0,22,88)"></rect>
+                                                                <rect x="25" y="85" width="6" height="6" transform="rotate(0,28,88)"></rect>
+                                                                <rect x="31" y="85" width="6" height="6" transform="rotate(0,34,88)"></rect>
+                                                                <rect x="37" y="85" width="6" height="6" transform="rotate(0,40,88)"></rect>
+                                                                <rect x="43" y="85" width="6" height="6" transform="rotate(0,46,88)"></rect>
+                                                                <path d="M 49 85v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,52,88)"></path>
+                                                                <path d="M 61 85v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,64,88)"></path>
+                                                                <circle cx="142" cy="88" r="3" transform="rotate(0,142,88)"></circle>
+                                                                <path d="M 151 85v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,154,88)"></path>
+                                                                <path d="M 169 85v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,172,88)"></path>
+                                                                <rect x="175" y="85" width="6" height="6" transform="rotate(0,178,88)"></rect>
+                                                                <rect x="181" y="85" width="6" height="6" transform="rotate(0,184,88)"></rect>
+                                                                <path d="M 25 91v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(180,28,94)"></path>
+                                                                <rect x="31" y="91" width="6" height="6" transform="rotate(0,34,94)"></rect>
+                                                                <path d="M 37 91v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,40,94)"></path>
+                                                                <path d="M 55 91v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,58,94)"></path>
+                                                                <path d="M 61 91v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,64,94)"></path>
+                                                                <path d="M 127 91v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,130,94)"></path>
+                                                                <path d="M 145 91v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,148,94)"></path>
+                                                                <rect x="151" y="91" width="6" height="6" transform="rotate(0,154,94)"></rect>
+                                                                <path d="M 163 91v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,166,94)"></path>
+                                                                <path d="M 169 91v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,172,94)"></path>
+                                                                <rect x="181" y="91" width="6" height="6" transform="rotate(0,184,94)"></rect>
+                                                                <path d="M 13 97v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,16,100)"></path>
+                                                                <path d="M 19 97v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,22,100)"></path>
+                                                                <path d="M 43 97v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,46,100)"></path>
+                                                                <path d="M 49 97v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,52,100)"></path>
+                                                                <circle cx="70" cy="100" r="3" transform="rotate(0,70,100)"></circle>
+                                                                <rect x="127" y="97" width="6" height="6" transform="rotate(0,130,100)"></rect>
+                                                                <path d="M 133 97v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,136,100)"></path>
+                                                                <path d="M 151 97v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(180,154,100)"></path>
+                                                                <rect x="157" y="97" width="6" height="6" transform="rotate(0,160,100)"></rect>
+                                                                <rect x="163" y="97" width="6" height="6" transform="rotate(0,166,100)"></rect>
+                                                                <path d="M 175 97v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,178,100)"></path>
+                                                                <rect x="181" y="97" width="6" height="6" transform="rotate(0,184,100)"></rect>
+                                                                <path d="M 13 103v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,16,106)"></path>
+                                                                <circle cx="34" cy="106" r="3" transform="rotate(0,34,106)"></circle>
+                                                                <rect x="43" y="103" width="6" height="6" transform="rotate(0,46,106)"></rect>
+                                                                <circle cx="64" cy="106" r="3" transform="rotate(0,64,106)"></circle>
+                                                                <path d="M 127 103v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(180,130,106)"></path>
+                                                                <rect x="133" y="103" width="6" height="6" transform="rotate(0,136,106)"></rect>
+                                                                <path d="M 139 103v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,142,106)"></path>
+                                                                <rect x="157" y="103" width="6" height="6" transform="rotate(0,160,106)"></rect>
+                                                                <rect x="163" y="103" width="6" height="6" transform="rotate(0,166,106)"></rect>
+                                                                <rect x="181" y="103" width="6" height="6" transform="rotate(0,184,106)"></rect>
+                                                                <path d="M 19 109v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,22,112)"></path>
+                                                                <path d="M 25 109v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,28,112)"></path>
+                                                                <path d="M 43 109v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(180,46,112)"></path>
+                                                                <rect x="49" y="109" width="6" height="6" transform="rotate(0,52,112)"></rect>
+                                                                <path d="M 55 109v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,58,112)"></path>
+                                                                <rect x="133" y="109" width="6" height="6" transform="rotate(0,136,112)"></rect>
+                                                                <rect x="139" y="109" width="6" height="6" transform="rotate(0,142,112)"></rect>
+                                                                <path d="M 157 109v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(180,160,112)"></path>
+                                                                <path d="M 163 109v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,166,112)"></path>
+                                                                <path d="M 175 109v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,178,112)"></path>
+                                                                <path d="M 181 109v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,184,112)"></path>
+                                                                <rect x="25" y="115" width="6" height="6" transform="rotate(0,28,118)"></rect>
+                                                                <path d="M 31 115v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,34,118)"></path>
+                                                                <path d="M 127 115v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,130,118)"></path>
+                                                                <rect x="133" y="115" width="6" height="6" transform="rotate(0,136,118)"></rect>
+                                                                <path d="M 139 115v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,142,118)"></path>
+                                                                <path d="M 151 115v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,154,118)"></path>
+                                                                <path d="M 169 115v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,172,118)"></path>
+                                                                <circle cx="16" cy="124" r="3" transform="rotate(0,16,124)"></circle>
+                                                                <rect x="25" y="121" width="6" height="6" transform="rotate(0,28,124)"></rect>
+                                                                <rect x="31" y="121" width="6" height="6" transform="rotate(0,34,124)"></rect>
+                                                                <path d="M 37 121v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,40,124)"></path>
+                                                                <path d="M 49 121v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,52,124)"></path>
+                                                                <rect x="55" y="121" width="6" height="6" transform="rotate(0,58,124)"></rect>
+                                                                <path d="M 61 121v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,64,124)"></path>
+                                                                <rect x="127" y="121" width="6" height="6" transform="rotate(0,130,124)"></rect>
+                                                                <path d="M 145 121v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,148,124)"></path>
+                                                                <rect x="151" y="121" width="6" height="6" transform="rotate(0,154,124)"></rect>
+                                                                <rect x="157" y="121" width="6" height="6" transform="rotate(0,160,124)"></rect>
+                                                                <rect x="163" y="121" width="6" height="6" transform="rotate(0,166,124)"></rect>
+                                                                <rect x="169" y="121" width="6" height="6" transform="rotate(0,172,124)"></rect>
+                                                                <rect x="25" y="127" width="6" height="6" transform="rotate(0,28,130)"></rect>
+                                                                <path d="M 31 127v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,34,130)"></path>
+                                                                <rect x="55" y="127" width="6" height="6" transform="rotate(0,58,130)"></rect>
+                                                                <rect x="61" y="127" width="6" height="6" transform="rotate(0,64,130)"></rect>
+                                                                <path d="M 67 127v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,70,130)"></path>
+                                                                <path d="M 85 127v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,88,130)"></path>
+                                                                <path d="M 91 127v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,94,130)"></path>
+                                                                <path d="M 115 127v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,118,130)"></path>
+                                                                <rect x="121" y="127" width="6" height="6" transform="rotate(0,124,130)"></rect>
+                                                                <path d="M 127 127v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,130,130)"></path>
+                                                                <path d="M 139 127v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,142,130)"></path>
+                                                                <rect x="145" y="127" width="6" height="6" transform="rotate(0,148,130)"></rect>
+                                                                <rect x="151" y="127" width="6" height="6" transform="rotate(0,154,130)"></rect>
+                                                                <rect x="157" y="127" width="6" height="6" transform="rotate(0,160,130)"></rect>
+                                                                <rect x="163" y="127" width="6" height="6" transform="rotate(0,166,130)"></rect>
+                                                                <rect x="169" y="127" width="6" height="6" transform="rotate(0,172,130)"></rect>
+                                                                <path d="M 19 133v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,22,136)"></path>
+                                                                <path d="M 25 133v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,28,136)"></path>
+                                                                <circle cx="40" cy="136" r="3" transform="rotate(0,40,136)"></circle>
+                                                                <path d="M 49 133v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,52,136)"></path>
+                                                                <path d="M 55 133v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,58,136)"></path>
+                                                                <path d="M 73 133v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,76,136)"></path>
+                                                                <path d="M 91 133v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,94,136)"></path>
+                                                                <path d="M 109 133v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,112,136)"></path>
+                                                                <rect x="115" y="133" width="6" height="6" transform="rotate(0,118,136)"></rect>
+                                                                <rect x="121" y="133" width="6" height="6" transform="rotate(0,124,136)"></rect>
+                                                                <path d="M 133 133v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,136,136)"></path>
+                                                                <rect x="139" y="133" width="6" height="6" transform="rotate(0,142,136)"></rect>
+                                                                <rect x="145" y="133" width="6" height="6" transform="rotate(0,148,136)"></rect>
+                                                                <rect x="151" y="133" width="6" height="6" transform="rotate(0,154,136)"></rect>
+                                                                <rect x="157" y="133" width="6" height="6" transform="rotate(0,160,136)"></rect>
+                                                                <rect x="163" y="133" width="6" height="6" transform="rotate(0,166,136)"></rect>
+                                                                <path d="M 169 133v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,172,136)"></path>
+                                                                <circle cx="64" cy="142" r="3" transform="rotate(0,64,142)"></circle>
+                                                                <rect x="73" y="139" width="6" height="6" transform="rotate(0,76,142)"></rect>
+                                                                <circle cx="88" cy="142" r="3" transform="rotate(0,88,142)"></circle>
+                                                                <path d="M 97 139v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,100,142)"></path>
+                                                                <path d="M 109 139v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,112,142)"></path>
+                                                                <path d="M 121 139v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,124,142)"></path>
+                                                                <rect x="133" y="139" width="6" height="6" transform="rotate(0,136,142)"></rect>
+                                                                <rect x="157" y="139" width="6" height="6" transform="rotate(0,160,142)"></rect>
+                                                                <path d="M 163 139v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,166,142)"></path>
+                                                                <path d="M 175 139v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,178,142)"></path>
+                                                                <path d="M 181 139v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,184,142)"></path>
+                                                                <path d="M 67 145v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,70,148)"></path>
+                                                                <rect x="73" y="145" width="6" height="6" transform="rotate(0,76,148)"></rect>
+                                                                <path d="M 79 145v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,82,148)"></path>
+                                                                <path d="M 97 145v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,100,148)"></path>
+                                                                <circle cx="118" cy="148" r="3" transform="rotate(0,118,148)"></circle>
+                                                                <path d="M 127 145v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,130,148)"></path>
+                                                                <rect x="133" y="145" width="6" height="6" transform="rotate(0,136,148)"></rect>
+                                                                <circle cx="148" cy="148" r="3" transform="rotate(0,148,148)"></circle>
+                                                                <rect x="157" y="145" width="6" height="6" transform="rotate(0,160,148)"></rect>
+                                                                <path d="M 169 145v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,172,148)"></path>
+                                                                <rect x="175" y="145" width="6" height="6" transform="rotate(0,178,148)"></rect>
+                                                                <path d="M 61 151v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,64,154)"></path>
+                                                                <rect x="67" y="151" width="6" height="6" transform="rotate(0,70,154)"></rect>
+                                                                <path d="M 73 151v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,76,154)"></path>
+                                                                <path d="M 85 151v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,88,154)"></path>
+                                                                <path d="M 91 151v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(0,94,154)"></path>
+                                                                <circle cx="106" cy="154" r="3" transform="rotate(0,106,154)"></circle>
+                                                                <path d="M 121 151v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,124,154)"></path>
+                                                                <rect x="133" y="151" width="6" height="6" transform="rotate(0,136,154)"></rect>
+                                                                <rect x="157" y="151" width="6" height="6" transform="rotate(0,160,154)"></rect>
+                                                                <rect x="175" y="151" width="6" height="6" transform="rotate(0,178,154)"></rect>
+                                                                <path d="M 67 157v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,70,160)"></path>
+                                                                <path d="M 79 157v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,82,160)"></path>
+                                                                <rect x="85" y="157" width="6" height="6" transform="rotate(0,88,160)"></rect>
+                                                                <rect x="91" y="157" width="6" height="6" transform="rotate(0,94,160)"></rect>
+                                                                <path d="M 97 157v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,100,160)"></path>
+                                                                <rect x="121" y="157" width="6" height="6" transform="rotate(0,124,160)"></rect>
+                                                                <path d="M 133 157v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(180,136,160)"></path>
+                                                                <rect x="139" y="157" width="6" height="6" transform="rotate(0,142,160)"></rect>
+                                                                <rect x="145" y="157" width="6" height="6" transform="rotate(0,148,160)"></rect>
+                                                                <rect x="151" y="157" width="6" height="6" transform="rotate(0,154,160)"></rect>
+                                                                <rect x="157" y="157" width="6" height="6" transform="rotate(0,160,160)"></rect>
+                                                                <rect x="163" y="157" width="6" height="6" transform="rotate(0,166,160)"></rect>
+                                                                <rect x="169" y="157" width="6" height="6" transform="rotate(0,172,160)"></rect>
+                                                                <rect x="175" y="157" width="6" height="6" transform="rotate(0,178,160)"></rect>
+                                                                <path d="M 61 163v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,64,166)"></path>
+                                                                <path d="M 73 163v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,76,166)"></path>
+                                                                <rect x="85" y="163" width="6" height="6" transform="rotate(0,88,166)"></rect>
+                                                                <path d="M 91 163v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,94,166)"></path>
+                                                                <path d="M 109 163v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(-90,112,166)"></path>
+                                                                <rect x="115" y="163" width="6" height="6" transform="rotate(0,118,166)"></rect>
+                                                                <rect x="121" y="163" width="6" height="6" transform="rotate(0,124,166)"></rect>
+                                                                <path d="M 127 163v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,130,166)"></path>
+                                                                <path d="M 157 163v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(180,160,166)"></path>
+                                                                <rect x="163" y="163" width="6" height="6" transform="rotate(0,166,166)"></rect>
+                                                                <path d="M 175 163v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,178,166)"></path>
+                                                                <rect x="61" y="169" width="6" height="6" transform="rotate(0,64,172)"></rect>
+                                                                <rect x="67" y="169" width="6" height="6" transform="rotate(0,70,172)"></rect>
+                                                                <path d="M 73 169v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,76,172)"></path>
+                                                                <path d="M 85 169v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,88,172)"></path>
+                                                                <path d="M 97 169v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,100,172)"></path>
+                                                                <rect x="103" y="169" width="6" height="6" transform="rotate(0,106,172)"></rect>
+                                                                <rect x="109" y="169" width="6" height="6" transform="rotate(0,112,172)"></rect>
+                                                                <path d="M 115 169v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,118,172)"></path>
+                                                                <circle cx="136" cy="172" r="3" transform="rotate(0,136,172)"></circle>
+                                                                <circle cx="154" cy="172" r="3" transform="rotate(0,154,172)"></circle>
+                                                                <rect x="163" y="169" width="6" height="6" transform="rotate(0,166,172)"></rect>
+                                                                <circle cx="184" cy="172" r="3" transform="rotate(0,184,172)"></circle>
+                                                                <path d="M 61 175v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(180,64,178)"></path>
+                                                                <path d="M 67 175v 6h 6a 6 6, 0, 0, 0, -6 -6" transform="rotate(90,70,178)"></path>
+                                                                <path d="M 79 175v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,82,178)"></path>
+                                                                <circle cx="94" cy="178" r="3" transform="rotate(0,94,178)"></circle>
+                                                                <path d="M 109 175v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,112,178)"></path>
+                                                                <circle cx="124" cy="178" r="3" transform="rotate(0,124,178)"></circle>
+                                                                <path d="M 157 175v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,160,178)"></path>
+                                                                <rect x="163" y="175" width="6" height="6" transform="rotate(0,166,178)"></rect>
+                                                                <path d="M 175 175v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(-90,178,178)"></path>
+                                                                <path d="M 79 181v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,82,184)"></path>
+                                                                <path d="M 97 181v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(180,100,184)"></path>
+                                                                <path d="M 103 181v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(0,106,184)"></path>
+                                                                <circle cx="136" cy="184" r="3" transform="rotate(0,136,184)"></circle>
+                                                                <circle cx="154" cy="184" r="3" transform="rotate(0,154,184)"></circle>
+                                                                <path d="M 163 181v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,166,184)"></path>
+                                                                <path d="M 175 181v 6h 3a 3 3, 0, 0, 0, 0 -6" transform="rotate(90,178,184)"></path>
+                                                            </clipPath>
+                                                            <clipPath id="clip-path-corners-square-color-0-0-5">
+                                                                <path clip-rule="evenodd" d="M 13 28v 12a 15 15, 0, 0, 0, 15 15h 12a 15 15, 0, 0, 0, 15 -15v -12a 15 15, 0, 0, 0, -15 -15h -12a 15 15, 0, 0, 0, -15 15M 28 19h 12a 9 9, 0, 0, 1, 9 9v 12a 9 9, 0, 0, 1, -9 9h -12a 9 9, 0, 0, 1, -9 -9v -12a 9 9, 0, 0, 1, 9 -9" transform="rotate(0,34,34)"></path>
+                                                            </clipPath>
+                                                            <clipPath id="clip-path-corners-dot-color-0-0-5">
+                                                                <rect x="25" y="25" width="18" height="18" transform="rotate(0,34,34)"></rect>
+                                                            </clipPath>
+                                                            <clipPath id="clip-path-corners-square-color-1-0-5">
+                                                                <path clip-rule="evenodd" d="M 145 28v 12a 15 15, 0, 0, 0, 15 15h 12a 15 15, 0, 0, 0, 15 -15v -12a 15 15, 0, 0, 0, -15 -15h -12a 15 15, 0, 0, 0, -15 15M 160 19h 12a 9 9, 0, 0, 1, 9 9v 12a 9 9, 0, 0, 1, -9 9h -12a 9 9, 0, 0, 1, -9 -9v -12a 9 9, 0, 0, 1, 9 -9" transform="rotate(90,166,34)"></path>
+                                                            </clipPath>
+                                                            <clipPath id="clip-path-corners-dot-color-1-0-5">
+                                                                <rect x="157" y="25" width="18" height="18" transform="rotate(90,166,34)"></rect>
+                                                            </clipPath>
+                                                            <clipPath id="clip-path-corners-square-color-0-1-5">
+                                                                <path clip-rule="evenodd" d="M 13 160v 12a 15 15, 0, 0, 0, 15 15h 12a 15 15, 0, 0, 0, 15 -15v -12a 15 15, 0, 0, 0, -15 -15h -12a 15 15, 0, 0, 0, -15 15M 28 151h 12a 9 9, 0, 0, 1, 9 9v 12a 9 9, 0, 0, 1, -9 9h -12a 9 9, 0, 0, 1, -9 -9v -12a 9 9, 0, 0, 1, 9 -9" transform="rotate(-90,34,166)"></path>
+                                                            </clipPath>
+                                                            <clipPath id="clip-path-corners-dot-color-0-1-5">
+                                                                <rect x="25" y="157" width="18" height="18" transform="rotate(-90,34,166)"></rect>
+                                                            </clipPath>
+                                                        </defs>
+                                                        <rect x="0" y="0" height="200" width="200" clip-path="url('#clip-path-background-color-5')" fill="transparent"></rect>
+                                                        <rect x="0" y="0" height="200" width="200" clip-path="url('#clip-path-dot-color-5')" fill="#abcbca"></rect>
+                                                        <rect x="13" y="13" height="42" width="42" clip-path="url('#clip-path-corners-square-color-0-0-5')" fill="#abcbca"></rect>
+                                                        <rect x="25" y="25" height="18" width="18" clip-path="url('#clip-path-corners-dot-color-0-0-5')" fill="#abcbca"></rect>
+                                                        <rect x="145" y="13" height="42" width="42" clip-path="url('#clip-path-corners-square-color-1-0-5')" fill="#abcbca"></rect>
+                                                        <rect x="157" y="25" height="18" width="18" clip-path="url('#clip-path-corners-dot-color-1-0-5')" fill="#abcbca"></rect>
+                                                        <rect x="13" y="145" height="42" width="42" clip-path="url('#clip-path-corners-square-color-0-1-5')" fill="#abcbca"></rect>
+                                                        <rect x="25" y="157" height="18" width="18" clip-path="url('#clip-path-corners-dot-color-0-1-5')" fill="#abcbca"></rect>
+                                                        <image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAYAAACAvzbMAAAAAXNSR0IArs4c6QAAIABJREFUeF7tnQ2sZVV59//PuTP0nhlACpJIFWwc3zRN0LSJrdU34kz1FW3ApFZMqR84c891tKFotVQSoQwVEi3VWkuq4z13RlotjfDapJAKfbUzQN5aW5I2StI0r5AKfiUKRWDm3DJzz3qzz8fcjznnnr33+thrPet/EiJy19fze561//tZa++1BfyRAAmQAAmQQA0CUqMOq5AACZAACZAAKCAMAhIgARIggVoEKCC1sLESCZAACZAABYQxQAIkQAIkUIsABaQWNlYiARIgARKggDAGSIAESIAEahGggNTCxkokQAIkQAIUEMYACZAACZBALQIUkFrYWIkESIAESIACwhggARIgARKoRYACUgsbK5EACZAACVBAGAMkQAIkQAK1CFBAamFjJRIgARIgAQoIY4AESIAESKAWAQpILWysRAIkQAIkQAFhDJAACZAACdQiQAGphY2VSIAESIAEKCCMARIgARIggVoEKCC1sLESCZAACZAABYQxQAIkQAIkUIsABaQWNlYiARIgARKggDAGSIAESIAEahGggNTCxkokQAIkQAIUEMYACZAACZBALQIUkFrYWIkESIAESIACwhggARIgARKoRYACUgsbK5EACZAACVBAGAMkQAIkQAK1CFBAamFjJRIgARIgAQoIY4AESIAESKAWAQpILWysRAIkQAIkQAFhDJAACZAACdQiQAGphY2VciBgeku7pb14NAdbaSMJ1CFAAalDjXWyIGB63SOAuV/aiweyMJhGkkBFAhSQisBYPA8CRfYByJGhteYmikgefqeV1QhQQKrxYulMCJhe16w3VdodzpVMfE8zyxPgpCjPiiUzITBcusLujeYyC8nE/TSzAgEKSAVYLKqfwMalq832UkT0RwAtrEKAAlKFFsuqJzA5+1gzm0tZ6kOABlYgQAGpAItFdRMwvaUDgNy4tZXMQnRHAa2rQoACUoUWy6olsPXS1WlLWXv4fojaUKBhFQhQQCrAYlG9BGYtXW2y/Ki0O3v00qBlJFCOAAWkHCeWUkyg3NLVaVkI3w1RHBM0rRwBCkg5TiyllEC1pauNELihrjQoaFZpAhSQ0qhYUCOBiktXmxBwQ11jTNCm8gQoIOVZsaQyAjbZxxoKioiy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" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAYAAACAvzbMAAAAAXNSR0IArs4c6QAAIABJREFUeF7tnQ2sZVV59//PuTP0nhlACpJIFWwc3zRN0LSJrdU34kz1FW3ApFZMqR84c891tKFotVQSoQwVEi3VWkuq4z13RlotjfDapJAKfbUzQN5aW5I2StI0r5AKfiUKRWDm3DJzz3qzz8fcjznnnr33+thrPet/EiJy19fze561//tZa++1BfyRAAmQAAmQQA0CUqMOq5AACZAACZAAKCAMAhIgARIggVoEKCC1sLESCZAACZAABYQxQAIkQAIkUIsABaQWNlYiARIgARKggDAGSIAESIAEahGggNTCxkokQAIkQAIUEMYACZAACZBALQIUkFrYWIkESIAESIACwhggARIgARKoRYACUgsbK5EACZAACVBAGAMkQAIkQAK1CFBAamFjJRIgARIgAQoIY4AESIAESKAWAQpILWysRAIkQAIkQAFhDJAACZAACdQiQAGphY2VSIAESIAEKCCMARIgARIggVoEKCC1sLESCZAACZAABYQxQAIkQAIkUIsABaQWNlYiARIgARKggDAGSIAESIAEahGggNTCxkokQAIkQAIUEMYACZAACZBALQIUkFrYWIkESIAESIACwhggARIgARKoRYACUgsbK5EACZAACVBAGAMkQAIkQAK1CFBAamFjJRIgARIgAQoIY4AESIAESKAWAQpILWysRAIkQAIkQAFhDJAACZAACdQiQAGphY2VciBgeku7pb14NAdbaSMJ1CFAAalDjXWyIGB63SOAuV/aiweyMJhGkkBFAhSQisBYPA8CRfYByJGhteYmikgefqeV1QhQQKrxYulMCJhe16w3VdodzpVMfE8zyxPgpCjPiiUzITBcusLujeYyC8nE/TSzAgEKSAVYLKqfwMalq832UkT0RwAtrEKAAlKFFsuqJzA5+1gzm0tZ6kOABlYgQAGpAItFdRMwvaUDgNy4tZXMQnRHAa2rQoACUoUWy6olsPXS1WlLWXv4fojaUKBhFQhQQCrAYlG9BGYtXW2y/Ki0O3v00qBlJFCOAAWkHCeWUkyg3NLVaVkI3w1RHBM0rRwBCkg5TiyllEC1pauNELihrjQoaFZpAhSQ0qhYUCOBiktXmxBwQ11jTNCm8gQoIOVZsaQyAjbZxxoKioiy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"
+                                                        x="73" y="73" width="54px" height="54px"></image>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 flex flex-col items-center gap-8">
+                                        <div class="flex flex-col items-center justify-center gap-3">
+                                            <button id="copy-qr-image-button" class="button flex w-fit max-w-full flex-row items-center gap-1" title="Copy QR Code to clipboard" aria-label="Copy QR Code to clipboard">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                                        <path d="M8 10a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2z"></path>
+                                                        <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>
+                                                    </g>
+                                                </svg>
+                                                <p>Copy QR Code to clipboard</p>
+                                            </button>
+                                            <button id="save-qr-code-config-button" class="button flex w-fit max-w-full flex-row items-center gap-1" title="Save QR Code configuration" aria-label="Save QR Code configuration">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                                        <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                                        <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2zm-5-4v-6"></path>
+                                                        <path d="M9.5 13.5L12 11l2.5 2.5"></path>
+                                                    </g>
+                                                </svg>
+                                                <p>Save QR Code configuration</p>
+                                            </button>
+                                            <button id="load-qr-code-config-button" class="button flex w-fit max-w-full flex-row items-center gap-1" aria-label="Load QR Code configuration">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                                        <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                                        <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2zm-5-10v6"></path>
+                                                        <path d="M9.5 13.5L12 11l2.5 2.5"></path>
+                                                    </g>
+                                                </svg>
+                                                <p>Load QR Code configuration</p>
+                                            </button>
+                                        </div>
+                                        <div id="export-options" class="grid place-items-center gap-4">
+                                            <p class="text-zinc-900 dark:text-zinc-100">Export as</p>
+                                            <div class="flex flex-row items-center justify-center gap-2">
+                                                <button id="download-qr-image-button-png" class="button" title="Download QR Code as PNG" aria-label="Download QR Code as PNG">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                        <g fill="none" stroke="currentColor" stroke-width="2">
+                                                            <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                                            <path d="M5 12V5a2 2 0 0 1 2-2h7l5 5v4"></path>
+                                                            <text x="1" y="22" fill="currentColor" stroke="none" font-size="11px" font-family="monospace" font-weight="600"> PNG </text>
+                                                        </g>
+                                                    </svg>
+                                                </button>
+                                                <button id="download-qr-image-button-jpg" class="button" title="Download QR Code as JPG" aria-label="Download QR Code as JPG">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                        <g fill="none" stroke="currentColor" stroke-width="2">
+                                                            <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                                            <path d="M5 12V5a2 2 0 0 1 2-2h7l5 5v4"></path>
+                                                            <text x="1" y="22" fill="currentColor" stroke="none" font-size="11px" font-family="monospace" font-weight="600"> JPG </text>
+                                                        </g>
+                                                    </svg>
+                                                </button>
+                                                <button id="download-qr-image-button-svg" class="button" title="Download QR Code as SVG" aria-label="Download QR Code as SVG">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                        <g fill="none" stroke="currentColor" stroke-width="2">
+                                                            <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                                            <path d="M5 12V5a2 2 0 0 1 2-2h7l5 5v4"></path>
+                                                            <text x="1" y="22" fill="currentColor" stroke="none" font-size="11px" font-family="monospace" font-weight="600"> SVG </text>
+                                                        </g>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="settings" class="flex w-full grow flex-col items-start gap-8 text-start">
+                                <div class="flex w-full flex-col gap-4">
+                                    <div data-state="closed" data-orientation="vertical" class="">
+                                        <h3 data-orientation="vertical" data-state="closed" class="flex"><button type="button" aria-controls="" aria-expanded="false" data-state="closed" id="reka-accordion-trigger-v-0" data-reka-collection-item="" data-orientation="vertical" class="flex flex-1 items-center justify-between py-4 font-medium transition-all [&amp;[data-state=open]&gt;svg]:rotate-180 button !px-4 text-2xl text-gray-700 outline-none dark:text-gray-100 md:!px-6 lg:!px-8"><span class="flex flex-row items-center gap-2"><span id="frame-settings-title">Frame settings</span><span class="rounded-full bg-white px-2 py-0.5 text-xs font-medium text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200">New!</span></span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200"><path d="m6 9 6 6 6-6"></path></svg></button></h3>
+                                        <div role="region" aria-labelledby="reka-accordion-trigger-v-0" data-state="closed" data-orientation="vertical" class="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down" id="reka-collapsible-content-v-1" hidden="" style="--reka-accordion-content-width: var(--reka-collapsible-content-width); --reka-accordion-content-height: var(--reka-collapsible-content-height); --reka-collapsible-content-height: 0px; --reka-collapsible-content-width: 0px;">
+                                            <!---->
+                                        </div>
+                                    </div>
+                                    <div data-state="open" data-orientation="vertical" class="">
+                                        <h3 data-orientation="vertical" data-state="open" class="flex"><button type="button" aria-controls="" aria-expanded="true" data-state="open" id="reka-accordion-trigger-v-2" data-reka-collection-item="" data-orientation="vertical" class="flex flex-1 items-center justify-between py-4 font-medium transition-all [&amp;[data-state=open]&gt;svg]:rotate-180 button !px-4 text-2xl text-gray-700 outline-none dark:text-gray-100 md:!px-6 lg:!px-8"><span id="qr-code-settings-title">QR code settings</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200"><path d="m6 9 6 6 6-6"></path></svg></button></h3>
+                                        <div role="region" aria-labelledby="reka-accordion-trigger-v-2" data-orientation="vertical" class="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down" id="reka-collapsible-content-v-3" data-state="open" style="--reka-accordion-content-width: var(--reka-collapsible-content-width); --reka-accordion-content-height: var(--reka-collapsible-content-height); --reka-collapsible-content-height: 1068.73046875px; --reka-collapsible-content-width: 933.1304931640625px; transition-duration: 0s; animation-name: none;">
+                                            <div class="px-2 pb-8 pt-4">
+                                                <section class="space-y-8" aria-labelledby="qr-code-settings-title">
+                                                    <div>
+                                                        <label>Preset</label>
+                                                        <div class="flex flex-row items-center justify-start gap-2">
+                                                            <button class="whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-fit flex gap-2 items-center justify-between focus-visible:ring-1 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-900 dark:hover:text-zinc-100" role="combobox" aria-expanded="false" aria-label="Select QR code preset" type="button" aria-haspopup="dialog" aria-controls="radix-vue-popover-content-v-6" data-state="closed"> Default (lyqht)
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-up-down-icon size-4 shrink-0 opacity-50">
+                                                                    <path d="m7 15 5 5 5-5"></path>
+                                                                    <path d="m7 9 5-5 5 5"></path>
+                                                                </svg>
+                                                            </button>
+                                                            <button class="button grid size-10 place-items-center" aria-label="Randomize style">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 640 512">
+                                                                    <path fill="#888888" d="M274.9 34.3c-28.1-28.1-73.7-28.1-101.8 0L34.3 173.1c-28.1 28.1-28.1 73.7 0 101.8l138.8 138.8c28.1 28.1 73.7 28.1 101.8 0l138.8-138.8c28.1-28.1 28.1-73.7 0-101.8L274.9 34.3zM200 224a24 24 0 1 1 48 0a24 24 0 1 1-48 0zM96 200a24 24 0 1 1 0 48a24 24 0 1 1 0-48zm128 176a24 24 0 1 1 0-48a24 24 0 1 1 0 48zm128-176a24 24 0 1 1 0 48a24 24 0 1 1 0-48zm-128-80a24 24 0 1 1 0-48a24 24 0 1 1 0 48zm96 328c0 35.3 28.7 64 64 64h192c35.3 0 64-28.7 64-64V256c0-35.3-28.7-64-64-64H461.7c11.6 36 3.1 77-25.4 105.5L320 413.8V448zm160-120a24 24 0 1 1 0 48a24 24 0 1 1 0-48z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="w-full">
+                                                        <div class="flex w-full flex-col flex-wrap gap-4 sm:flex-row sm:gap-x-8">
+                                                            <div class="grow">
+                                                                <div class="mb-2 flex items-center gap-4">
+                                                                    <label for="data">Data to encode</label>
+                                                                    <div class="flex grow items-center gap-2">
+                                                                        <button class="secondary-button opacity-50">Single export</button>
+                                                                        <button class="secondary-button">Batch export</button>
+                                                                        <!---->
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex flex-col items-start">
+                                                                    <textarea id="data" class="mr-2 grow text-input" placeholder="data to encode e.g. a URL or a string"></textarea>
+                                                                    <button aria-haspopup="dialog" aria-expanded="false" class="secondary-button mt-2 flex items-center gap-1 self-end" aria-label="Open data type generator"><span>Data templates</span>
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                                                                            <path fill="none" stroke="#888888" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 7l5 5l-5 5m6-10l5 5l-5 5"></path>
+                                                                        </svg>
+                                                                    </button>
+                                                                </div>
+                                                                <!---->
+                                                            </div>
+                                                            <div class="shrink-0">
+                                                                <fieldset class="h-full" role="radio" tabindex="0">
+                                                                    <div class="flex flex-row items-center gap-2">
+                                                                        <legend>Error correction level</legend>
+                                                                        <a href="https://docs.uniqode.com/en/articles/7219782-what-is-the-recommended-error-correction-level-for-printing-a-qr-code" target="_blank" class="icon-button flex flex-row items-center" aria-label="What is error correction level?">
+                                                                            <svg class="me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                                                                                <path fill="#888888" d="M11.95 18q.525 0 .888-.363t.362-.887t-.362-.888t-.888-.362t-.887.363t-.363.887t.363.888t.887.362m.05 4q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m.1-12.3q.625 0 1.088.4t.462 1q0 .55-.337.975t-.763.8q-.575.5-1.012 1.1t-.438 1.35q0 .35.263.588t.612.237q.375 0 .638-.25t.337-.625q.1-.525.45-.937t.75-.788q.575-.55.988-1.2t.412-1.45q0-1.275-1.037-2.087T12.1 6q-.95 0-1.812.4T8.975 7.625q-.175.3-.112.638t.337.512q.35.2.725.125t.625-.425q.275-.375.688-.575t.862-.2"></path>
+                                                                            </svg>
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="radio">
+                                                                        <input id="errorCorrectionLevel-L" type="radio" value="L">
+                                                                        <div class="flex items-center gap-2">
+                                                                            <label for="errorCorrectionLevel-L">Low (7%)</label>
+                                                                            <!---->
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="radio">
+                                                                        <input id="errorCorrectionLevel-M" type="radio" value="M">
+                                                                        <div class="flex items-center gap-2">
+                                                                            <label for="errorCorrectionLevel-M">Medium (15%)</label>
+                                                                            <!---->
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="radio">
+                                                                        <input id="errorCorrectionLevel-Q" type="radio" value="Q">
+                                                                        <div class="flex items-center gap-2">
+                                                                            <label for="errorCorrectionLevel-Q">High (25%)</label>
+                                                                            <!---->
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="radio">
+                                                                        <input id="errorCorrectionLevel-H" type="radio" value="H" aria-describedby="recommended-text">
+                                                                        <div class="flex items-center gap-2">
+                                                                            <label for="errorCorrectionLevel-H">Highest (30%)</label><span class="inline-flex items-center rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200">Suggested</span></div>
+                                                                    </div>
+                                                                </fieldset>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="w-full">
+                                                        <div class="mb-2 flex flex-row items-center gap-2">
+                                                            <label for="image-url">Logo image URL</label>
+                                                            <button class="icon-button flex flex-row items-center">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                                                        <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                                                        <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2zm-5-10v6"></path>
+                                                                        <path d="M9.5 13.5L12 11l2.5 2.5"></path>
+                                                                    </g>
+                                                                </svg><span>Upload image</span></button>
+                                                        </div>
+                                                        <textarea name="image-url" class="text-input" id="image-url" rows="1" placeholder="Logo image URL"></textarea>
+                                                    </div>
+                                                    <div class="flex flex-row items-center gap-2">
+                                                        <label for="with-background">With background</label>
+                                                        <input id="with-background" type="checkbox">
+                                                    </div>
+                                                    <div id="color-settings" class="flex w-full flex-row flex-wrap gap-4">
+                                                        <div class="flex flex-row items-center gap-2">
+                                                            <label for="background-color">Background color</label>
+                                                            <input id="background-color" type="color" class="color-input">
+                                                        </div>
+                                                        <div class="flex flex-row items-center gap-2">
+                                                            <label for="dots-color">Dots color</label>
+                                                            <input id="dots-color" type="color" class="color-input">
+                                                        </div>
+                                                        <div class="flex flex-row items-center gap-2">
+                                                            <label for="corners-square-color">Corners Square color</label>
+                                                            <input id="corners-square-color" type="color" class="color-input">
+                                                        </div>
+                                                        <div class="flex flex-row items-center gap-2">
+                                                            <label for="corners-dot-color">Corners Dot color</label>
+                                                            <input id="corners-dot-color" type="color" class="color-input">
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex w-full flex-col gap-4 sm:flex-row sm:gap-8">
+                                                        <div class="w-full sm:w-1/3">
+                                                            <label for="width">Width (px)</label>
+                                                            <input class="text-input" id="width" type="number" placeholder="width in pixels">
+                                                        </div>
+                                                        <div class="w-full sm:w-1/3">
+                                                            <label for="height">Height (px)</label>
+                                                            <input class="text-input" id="height" type="number" placeholder="height in pixels">
+                                                        </div>
+                                                        <div class="w-full sm:w-1/3">
+                                                            <label for="border-radius">Border radius (px)</label>
+                                                            <input class="text-input" id="border-radius" type="number" placeholder="24">
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex w-full flex-col gap-4 sm:flex-row sm:gap-8">
+                                                        <div class="w-full sm:w-1/2">
+                                                            <label for="margin">Margin (px)</label>
+                                                            <input class="text-input" id="margin" type="number" placeholder="0">
+                                                        </div>
+                                                        <div class="w-full sm:w-1/2">
+                                                            <label for="image-margin">Image margin (px)</label>
+                                                            <input class="text-input" id="image-margin" type="number" placeholder="0">
+                                                        </div>
+                                                    </div>
+                                                    <div id="dots-squares-settings" class="mb-4 flex w-full flex-col flex-wrap gap-6 md:flex-row">
+                                                        <fieldset class="flex-1" role="radio" tabindex="0">
+                                                            <legend>Dots type</legend>
+                                                            <div class="radio">
+                                                                <input id="dotsOptionsType-dots" type="radio" value="dots">
+                                                                <label for="dotsOptionsType-dots">dots</label>
+                                                            </div>
+                                                            <div class="radio">
+                                                                <input id="dotsOptionsType-rounded" type="radio" value="rounded">
+                                                                <label for="dotsOptionsType-rounded">rounded</label>
+                                                            </div>
+                                                            <div class="radio">
+                                                                <input id="dotsOptionsType-classy" type="radio" value="classy">
+                                                                <label for="dotsOptionsType-classy">classy</label>
+                                                            </div>
+                                                            <div class="radio">
+                                                                <input id="dotsOptionsType-classy-rounded" type="radio" value="classy-rounded">
+                                                                <label for="dotsOptionsType-classy-rounded">classy-rounded</label>
+                                                            </div>
+                                                            <div class="radio">
+                                                                <input id="dotsOptionsType-square" type="radio" value="square">
+                                                                <label for="dotsOptionsType-square">square</label>
+                                                            </div>
+                                                            <div class="radio">
+                                                                <input id="dotsOptionsType-extra-rounded" type="radio" value="extra-rounded">
+                                                                <label for="dotsOptionsType-extra-rounded">extra-rounded</label>
+                                                            </div>
+                                                        </fieldset>
+                                                        <fieldset class="flex-1" role="radio" tabindex="0">
+                                                            <legend>Corners Square type</legend>
+                                                            <div class="radio">
+                                                                <input id="cornersSquareOptionsType-dot" type="radio" value="dot">
+                                                                <label for="cornersSquareOptionsType-dot">dot</label>
+                                                            </div>
+                                                            <div class="radio">
+                                                                <input id="cornersSquareOptionsType-square" type="radio" value="square">
+                                                                <label for="cornersSquareOptionsType-square">square</label>
+                                                            </div>
+                                                            <div class="radio">
+                                                                <input id="cornersSquareOptionsType-extra-rounded" type="radio" value="extra-rounded">
+                                                                <label for="cornersSquareOptionsType-extra-rounded">extra-rounded</label>
+                                                            </div>
+                                                        </fieldset>
+                                                        <fieldset class="flex-1" role="radio" tabindex="0">
+                                                            <legend>Corners Dot type</legend>
+                                                            <div class="radio">
+                                                                <input id="cornersDotOptionsType-dot" type="radio" value="dot">
+                                                                <label for="cornersDotOptionsType-dot">dot</label>
+                                                            </div>
+                                                            <div class="radio">
+                                                                <input id="cornersDotOptionsType-square" type="radio" value="square">
+                                                                <label for="cornersDotOptionsType-square">square</label>
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!---->
+                        <!---->
+                    </div>
+                </div>
+            </div>
+            <footer data-v-d9680029="" data-v-e6bd2785="" class="fixed inset-x-0 bottom-0 hidden p-4 text-sm text-zinc-600 dark:text-zinc-400 md:flex md:justify-center">
+                <div data-v-d9680029="" class="flex items-center gap-2"><span data-v-d9680029="">Created by</span><a data-v-d9680029="" href="https://github.com/lyqht" target="_blank" class="text-zinc-900 hover:text-zinc-700 dark:text-zinc-100 dark:hover:text-zinc-300">Estee Tey 🐧🌻</a><span data-v-d9680029="">|</span>
+                    <button data-v-d9680029="" class="secondary-button" aria-label="View changelog" type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">v0.23.0</button>
+                </div>
+            </footer>
+        </main>
+    </div>
+    <!---->
+    <!---->
+    <!---->
+    <!---->
+</body>
+
+</html>
