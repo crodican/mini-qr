@@ -15,7 +15,7 @@ An app to create beautiful QR codes and scan various QR code types.
     <a href="https://viteconf.org/"><img width="100" src="public/presets/viteconf2023.svg" /></a>
 </div>
 
-## features
+## Features
 
 - ✅ Accessible: minimally WCAG A compliant
 - 🎨 Customizable colors and styles
