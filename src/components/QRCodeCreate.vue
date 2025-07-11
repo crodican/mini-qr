@@ -1,7 +1,45 @@
 <script setup lang="ts">
-// ...imports remain unchanged...
-
-// --- SNIP: keep all your current imports ---
+import CopyImageModal from '@/components/CopyImageModal.vue'
+import DataTemplatesModal from '@/components/DataTemplatesModal.vue'
+import QRCodeFrame from '@/components/QRCodeFrame.vue'
+import StyledQRCode from '@/components/StyledQRCode.vue'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from '@/components/ui/accordion'
+import { Combobox } from '@/components/ui/Combobox'
+import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer'
+import VCardPreview from '@/components/VCardPreview.vue'
+import { createRandomColor, getRandomItemInArray } from '@/utils/color'
+import {
+  copyImageToClipboard,
+  downloadJpgElement,
+  downloadPngElement,
+  downloadSvgElement,
+  getJpgElement,
+  getPngElement,
+  getSvgString,
+  IS_COPY_IMAGE_TO_CLIPBOARD_SUPPORTED
+} from '@/utils/convertToImage'
+import { parseCSV, validateCSVData } from '@/utils/csv'
+import { generateVCardData } from '@/utils/dataEncoding'
+import { getNumericCSSValue } from '@/utils/formatting'
+import { allQrCodePresets, defaultPreset, type Preset } from '@/utils/qrCodePresets'
+import { allFramePresets, defaultFramePreset, type FramePreset } from '@/utils/framePresets'
+import { useMediaQuery } from '@vueuse/core'
+import JSZip from 'jszip'
+import {
+  type CornerDotType,
+  type CornerSquareType,
+  type DotType,
+  type ErrorCorrectionLevel,
+  type Options as StyledQRCodeProps
+} from 'qr-code-styling'
+import { computed, onMounted, ref, watch, nextTick } from 'vue'
+import 'vue-i18n'
+import { useI18n } from 'vue-i18n'
 
 interface FrameStyle {
   textColor: string
@@ -27,9 +65,10 @@ const { t } = useI18n()
 //#endregion
 
 //#region /* QR code style settings */
-const data = ref(props.initialData || "https://bit.ly/phillyoshp")
+const data = ref(props.initialData || import.meta.env.VITE_DEFAULT_DATA_TO_ENCODE || '')
 const debouncedData = ref(data.value)
 let dataDebounceTimer: ReturnType<typeof setTimeout>
+
 watch(
   data,
   (newVal) => {
@@ -40,36 +79,45 @@ watch(
   },
   { immediate: true }
 )
+const image = ref()
+const width = ref()
+const height = ref()
+const margin = ref()
+const imageMargin = ref()
 
-// ---- Hardcoded config values ----
-const image = ref("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgdmVyc2lvbj0iMS4xIgogICBpZD0iTGF5ZXJfMSIKICAgeD0iMHB4IgogICB5PSIwcHgiCiAgIHdpZHRoPSIxMDAlIgogICB2aWV3Qm94PSIwIDAgNjU4IDM2NyIKICAgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNjU4IDM2NyIKICAgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIKICAgc29kaXBvZGk6ZG9jbmFtZT0iUFJPLUFDVF9wdXJwbGUuc3ZnIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIxLjQgKDg2YThhZDcsIDIwMjQtMTAtMTEpIgogICB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIKICAgeG1sbnM6c29kaXBvZGk9Imh0dHA6Ly9zb2RpcG9kaS5zb3VyY2Vmb3JnZS5uZXQvRFREL3NvZGlwb2RpLTAuZHRkIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzCiAgIGlkPSJkZWZzNzYiIC8+PHNvZGlwb2RpOm5hbWVkdmlldwogICBpZD0ibmFtZWR2aWV3NzYiCiAgIHBhZ2Vjb2xvcj0iI2ZmZmZmZiIKICAgYm9yZGVyY29sb3I9IiMxMTExMTEiCiAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgIGlua3NjYXBlOnNob3dwYWdlc2hhZG93PSIwIgogICBpbmtzY2FwZTpwYWdlb3BhY2l0eT0iMCIKICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMSIKICAgaW5rc2NhcGU6ZGVza2NvbG9yPSIjZDFkMWQxIgogICBpbmtzY2FwZTp6b29tPSIxLjYzOTYzOTkiCiAgIGlua3NjYXBlOmN4PSIyNzIuMzE1ODkiCiAgIGlua3NjYXBlOmN5PSIyNTUuNTQzOTEiCiAgIGlua3NjYXBlOndpbmRvdy13aWR0aD0iMTkyMCIKICAgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iMTExNSIKICAgaW5rc2NhcGU6d2luZG93LXg9Ii05IgogICBpbmtzY2FwZTp3aW5kb3cteT0iLTkiCiAgIGlua3NjYXBlOndpbmRvdy1tYXhpbWl6ZWQ9IjEiCiAgIGlua3NjYXBlOmN1cnJlbnQtbGF5ZXI9IkxheWVyXzEiIC8+CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgo8ZwogICBpZD0iZzIiCiAgIGlua3NjYXBlOmxhYmVsPSJQdXJwbGUgT3ZhbCBXaGl0ZSBCb3JkZXIgQmxhY2sgQm9yZGVyIgogICB0cmFuc2Zvcm09Im1hdHJpeCgzLjc5NDQwMzEsMCwwLDMuODkyNzM2NiwtMzYuMTYwMDQ5LDIuOTEyMjk4NCkiPjxlbGxpcHNlCiAgICAgc3R5bGU9Im9wYWNpdHk6MTtmaWxsOiM1NTI5OGE7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOiNmZmZmZmY7c3Ryb2tlLXdpZHRoOjU7c3Ryb2tlLWxpbmVqb2luOmJldmVsO3N0cm9rZS1taXRlcmxpbWl0OjM0LjU7c3Ryb2tlLWRhc2hhcnJheTpub25lO3N0cm9rZS1vcGFjaXR5OjE7cGFpbnQtb3JkZXI6ZmlsbCBtYXJrZXJzIHN0cm9rZSIKICAgICBpZD0icGF0aDI2IgogICAgIGN4PSI5Ni44NjkwMDMiCiAgICAgY3k9IjQ1LjE4NDUwMiIKICAgICByeD0iNTcuMzMzODk3IgogICAgIHJ5PSIyOC43MjMzOTYiCiAgICAgaW5rc2NhcGU6bGFiZWw9InB1cnBsZSBvdmFsIHdoaXRlIGJvcmRlciIgLz48ZWxsaXBzZQogICAgIHN0eWxlPSJvcGFjaXR5OjE7ZmlsbDojNTU1NTIyO2ZpbGwtb3BhY2l0eTowO3N0cm9rZTojNTUyOThhO3N0cm9rZS13aWR0aDoyLjA3NjI0O3N0cm9rZS1saW5lam9pbjpiZXZlbDtzdHJva2UtbWl0ZXJsaW1pdDozNC41O3N0cm9rZS1kYXNoYXJyYXk6bm9uZTtzdHJva2Utb3BhY2l0eToxO3BhaW50LW9yZGVyOmZpbGwgbWFya2VycyBzdHJva2UiCiAgICAgaWQ9InBhdGgyNi01IgogICAgIGN4PSI5Ni44NjkwMDMiCiAgICAgY3k9IjQ1LjE4NDQ5OCIKICAgICByeD0iNTguNzk1ODc5IgogICAgIHJ5PSIzMC4xODUzNzciCiAgICAgaW5rc2NhcGU6bGFiZWw9InB1cnBsZSBib3JkZXIiIC8+PC9nPjxnCiAgIGlkPSJnMjktMyIKICAgaW5rc2NhcGU6bGFiZWw9IlBSTy1BQ1QiCiAgIHRyYW5zZm9ybT0ibWF0cml4KDMuNzgyNTU0MiwwLDAsMy44Njg5MTM4LC0zNS4wMTM1NTYsMy45ODA2MzI2KSI+PGcKICAgICBpZD0iZzI3LTMiCiAgICAgaW5rc2NhcGU6bGFiZWw9IkFDVCI+PHBhdGgKICAgICAgIGZpbGw9IiNmN2Y2ZmEiCiAgICAgICBvcGFjaXR5PSIxIgogICAgICAgc3Ryb2tlPSJub25lIgogICAgICAgZD0ibSAxMzcuNDI3ODcsNDQuOTY3ODI3IGMgLTAuMDk3LDEuOTU1MTgzIC0wLjIyODMsMy43ODk1OTEgLTAuMjY2MzEsNS42MjU5MzEgLTAuMDE2LDAuNzc0NDMgMC4yNTA2NywxLjU1NTAzIDAuMjMxOTIsMi4zMjkwMiAtMC4wMTkyLDAuNzk0MDYgLTAuMjUwNDIsMS43MjQ1OCAtMS4yNDM5NSwxLjY3MjIgLTAuODg1NTgsLTAuMDQ2NyAtMS40NTE4OCwtMC42NjYyMSAtMS4zODIyMSwtMS43MTI3NiAwLjI4MjY0LC00LjI0NjA5IDAuNTM4OTksLTguNDkzOTk1IDAuNzg2NzcsLTEyLjc0MjI5NiAwLjA0NTYsLTAuNzgyNTM0IDAuMDA3LC0xLjU3MDAxMSAwLjAwNywtMi4zMjcxNCAtMS41Mjk2MywwLjA2ODQyIC0yLjk2MTg1LDAuMTU1NDM1IC00LjM5NTI2LDAuMTg1MTE2IC0wLjU1OTcyLDAuMDExNTkgLTEuMTcxMDYsMC4wMDk2IC0xLjY2NzY1LC0wLjIwMTIyNCAtMC4zODg5LC0wLjE2NTA4MSAtMC42MzcyLC0wLjY2MTQ0MiAtMC45NDc5NywtMS4wMTA2MjEgMC40MTg0OSwtMC4zNjc0IDAuODIwMTQsLTEuMDMxNTcxIDEuMjU4MDYsLTEuMDU2NDI4IDQuNTE5MDMsLTAuMjU2NTIyIDkuMDQzNTMsLTAuNDIxMzE1IDEzLjU2NzgzLC0wLjU3MjE1MSAwLjQwOTg5LC0wLjAxMzY1IDAuOTY4OTIsMC4xMjc2NTEgMS4yMTA1MywwLjQwOTYzNiAwLjM1MjM1LDAuNDExMjAyIDAuNDc5NTMsMS4wMTUzMzggMC43MDI2OSwxLjUzNzIyNiAtMC41NTA1NywwLjExNzExIC0xLjEwMjM4LDAuMzM3NzI1IC0xLjY1MTQ5LDAuMzMxMjEzIC0xLjQzNzQzLC0wLjAxNzA0IC0yLjg3NTcsLTAuMTA3NTA1IC00LjMwOTY3LC0wLjIxOTQ0NSAtMC44OTA1LC0wLjA2OTUyIC0xLjA3MzI3LDAuMzI4ODg4IC0xLjE0MjE5LDEuMTUxMTgxIC0wLjE4MTUzLDIuMTY2MDM4IC0wLjQ5MzkzLDQuMzIxMTA5IC0wLjc1NzYyLDYuNjAwNTQyIHoiCiAgICAgICBpZD0icGF0aDcxLTQiCiAgICAgICBzdHlsZT0ic3Ryb2tlLXdpZHRoOjAuMjY0NTgzIgogICAgICAgaW5rc2NhcGU6bGFiZWw9IlQiIC8+PHBhdGgKICAgICAgIGZpbGw9IiNmOGY3ZmEiCiAgICAgICBvcGFjaXR5PSIxIgogICAgICAgc3Ryb2tlPSJub25lIgogICAgICAgZD0ibSAxMTYuNzg3NjEsNDcuMjc4NDg4IGMgMC4zODg1OCwxLjQ2ODg1IC0wLjEzNDk5LDMuMDY2MSAxLjAyNzc1LDQuMTk2NDcgMC41NDEwMywwLjUyNTk1IDEuMTM2ODEsMS4wOTcxNSAxLjgxODY1LDEuMzU3OCAyLjExMTk1LDAuODA3MzcgNC42NjE1NCwtMC4xMDk0MSA1Ljk2NTQ0LC0yLjAwNjEgMC42MjE2NSwtMC45MDQyNiAxLjQzMTM3LC0wLjgxMTMxIDIuMTY1MDksLTAuMjU4OTMgMC43NTA3LDAuNTY1MTcgMC43ODk0NywxLjE5MTA0IDAuMDM4NywxLjk1MjE5IC0yLjI4NDY1LDIuMzE2MTEgLTUuMDc0MDIsMy4xNTI2OCAtOC4yMTg5NiwyLjkzMTQgLTIuMzQ1NzMsLTAuMTY1MDQgLTQuNDkxNjYsLTIuOTI0NCAtNC45NDc2MSwtNS43MTc2NCAtMC43MDkxNywtNC4zNDQ2MTYgMC41MzQxOSwtOC4yMzQ2MDUgMi44MDk2MywtMTEuNzM4NDgyIDAuOTg2OTgsLTEuNTE5ODI3IDIuNzQ0NzYsLTIuNzEzNDQ3IDQuNDAxMiwtMy41NzkzNTIgMi4wMDEwOSwtMS4wNDYwNjUgNC41NjI2LDAuNzAyMTkxIDUuNDg0MTEsMy40MTgxMjMgMC4xNzk5LDAuNTMwMjM2IDAuMzUwNDMsMS4xMTYzMTEgMC4zMDEwNiwxLjY1NjEyOCAtMC4wNDQ5LDAuNDkwNDI5IC0wLjI3OTY4LDEuMjEzOTM3IC0wLjYzNTQ4LDEuMzcxMDM5IC0wLjY1MjM0LDAuMjg4MDMzIC0xLjMwMTM2LDAuMDczMyAtMS42NTY0NSwtMC43NzUxMDUgLTAuNDIzODMsLTEuMDEyNjQ1IC0wLjk2NiwtMS45ODk3NTQgLTEuNTY5MjEsLTIuOTA4NTM4IC0wLjQyMDI1LC0wLjY0MDExNSAtMS4wMjM4NSwtMC42NDc1MzEgLTEuNjk2NzYsLTAuMTcxMDUxIC0yLjkwMDk0LDIuMDU0MTMzIC00LjUyMTc2LDQuODYzMjk2IC01LjA0NzE2LDguMzQzMTYyIC0wLjA5MDksMC42MDIwMjUgLTAuMTYwNTIsMS4yMDcyNjIgLTAuMjM5OTcsMS45Mjg4ODYgeiIKICAgICAgIGlkPSJwYXRoNzAtMSIKICAgICAgIHN0eWxlPSJzdHJva2Utd2lkdGg6MC4yNjQ1ODMiCiAgICAgICBpbmtzY2FwZTpsYWJlbD0iQyIgLz48cGF0aAogICAgICAgZmlsbD0iI2Y4ZjdmYSIKICAgICAgIG9wYWNpdHk9IjEiCiAgICAgICBzdHJva2U9Im5vbmUiCiAgICAgICBkPSJtIDEwMi43ODUsNDUuOTMyODUgYyAxLjE5NDI1LC0zLjI5NzgwNyAyLjM3NTk5LC02LjQ5MjA5MiAzLjUzMTksLTkuNjk1Njk0IDAuMTI3ODQsLTAuMzU0MzA4IDAuMTg2NSwtMC43NzEzNTggMC4xNDEzMiwtMS4xNDI3NzcgLTAuMTA3NzUsLTAuODg1ODg0IDAuMjQzOTIsLTEuNTkyNjE3IDEuMDc1MzIsLTEuNjE3NTE1IDAuNTUzODQsLTAuMDE2NTkgMS4zMDI2NCwwLjQyNDQwNSAxLjY0NTUxLDAuODkzNTExIDAuNDY1NTYsMC42MzY5NTggMC43MjU3LDEuNDc0NzM4IDAuODk5MjcsMi4yNjQ3NjIgMC40OTI3MiwyLjI0MjU4NSAwLjg5NjcsNC41MDQ2NjQgMS4zNjM1OCw2LjkwMjY5NiAwLjA5MTYsMC4wMzM4NiAwLjM2MywwLjE0NDkwMiAwLjY0MTEzLDAuMjM1MDQzIDEuMTg4NDQsMC4zODUxNzIgMS40NzEyNSwxLjIxMTUyMiAwLjQ5NDkxLDEuOTMzMzk4IC0wLjk4OTExLDAuNzMxMzExIC0wLjgwMzAzLDEuNTI3NDI0IC0wLjcwNzU1LDIuNDk1MTY0IDAuMjE5MjksMi4yMjI0OCAwLjM2Nzc0LDQuNDU1NzcgMC40MTU3Nyw2LjY4NzQ2IDAuMDA4LDAuMzY2MTEgLTAuNzcyNDIsMS4xMTYyMSAtMC45NjIwMSwxLjA0OTExIC0wLjUxOTkyLC0wLjE4NDAxIC0xLjIwNzk2LC0wLjY0NzUyIC0xLjMwNjMxLC0xLjExMTM0IC0wLjIwNjA5LC0wLjk3MTgyIC0wLjA0NDcsLTIuMDE2MzEgLTAuMDkyNiwtMy4wMjgyMiAtMC4wNjgyLC0xLjQ0MjEzIC0wLjE1NDA0LC0yLjg4NTgxIC0wLjMyMTA2LC00LjMxODQ5IC0wLjAyNzYsLTAuMjM2NzIgLTAuNTMwMDIsLTAuNjE4NTM3IC0wLjc3NTUzLC0wLjU5MTYxMSAtMC43MjIwOSwwLjA3OTE5IC0xLjQyMzk1LDAuMzM1ODAxIC0yLjEzNjIyLDAuNTEyOTQxIC0xLjY0OTg1LDAuNDEwMjkgLTIuODc5NjIsMS4yMzQ4MiAtMy4zMDA3NywzLjAyNTYzIC0wLjQyMzc5LDEuODAyMDMgLTAuOTMwNCwzLjU4NTUzIC0xLjQ0MzUzLDUuMzY0OCAtMC4xMDM3OSwwLjM1OTg1IC0wLjQ1MjA4LDAuOTY0MzEgLTAuNTk2MzgsMC45Mzg4NSAtMC40NTA0OSwtMC4wNzk1IC0xLjA3NTM0LC0wLjMxMTM0IC0xLjIyODM5LC0wLjY2MTAzIC0wLjIxNDM2NywtMC40ODk3OCAtMC4xODYyNjcsLTEuMTY5OTYgLTAuMDQ3MiwtMS43MTM3NSAwLjM2MDk0LC0xLjQxMDk5IDAuODM5MjQsLTIuNzkxOTYgMS4xOTA4OSwtMy45MjcyNCAtMC42ODY0NCwtMC40MTkxNSAtMS41MDUzNjcsLTAuNjYzNzMgLTEuNTQ1MTY3LC0xLjAwMDQxIC0wLjA2ODIsLTAuNTc3IDAuMTg2MTgsLTEuMzgyMDggMC42MDIxOTcsLTEuNzgzNTUgMC42ODk1OCwtMC42NjU0NjIgMS42MTQ4LC0xLjA4Njc3NCAyLjQ2MDgzLC0xLjcxMTczOCBtIDMuNTczOSwtMS4wMTk5NjcgYyAwLjg5ODY4LC0wLjI5MTg0MyAxLjc5NzM2LC0wLjU4MzY4NiAyLjgxNzg5LC0wLjkxNTEwMSAtMC4zNjcxNiwtMS44OTc4NTYgLTAuNzMxNjQsLTMuNzgxODc0IC0xLjA5NjEyLC01LjY2NTg5MyAtMS4wMTY3LDIuMDg3NzUzIC0xLjcxOTIzLDQuMjAyNDM4IC0yLjM5Mzc5LDYuMzI2MDA4IC0wLjAxMzMsMC4wNDE4IDAuMzAxMzcsMC4xODc3NjEgMC42NzIwMiwwLjI1NDk4NiB6IgogICAgICAgaWQ9InBhdGg2OC0xIgogICAgICAgc3R5bGU9InN0cm9rZS13aWR0aDowLjI2NDU4MyIKICAgICAgIGlua3NjYXBlOmxhYmVsPSJBIiAvPjwvZz48cGF0aAogICAgIGZpbGw9IiNmNmY0ZjkiCiAgICAgb3BhY2l0eT0iMSIKICAgICBzdHJva2U9Im5vbmUiCiAgICAgZD0ibSA5OS4wMjkxMDMsNDYuMjg5MjcyIGMgMC4wODkzLDEuMTQyNTc2IC0wLjQ1MjY5LDEuNDc0NjI2IC0xLjQxOTU2LDEuNTMyNDg2IC0xLjM4NjMzLDAuMDgzIC0yLjc2NDAxLDAuMzAxODggLTQuMTQ4MDQsMC40MzUzNCAtMC43NzUwNiwwLjA3NDcgLTEuNTk2MDUsMC4yMzkzNSAtMS45OTIyMSwtMC43NTc5NiAtMC40OTA0MSwtMS4yMzQ1OTQgLTAuMDI1NSwtMS43OTUyMzUgMS4yOTA1OCwtMS44MjE5NjEgMS40NDA5NCwtMC4wMjkyNiAyLjg4OTk0LC0wLjE5NDQ2IDQuMzExOTEsLTAuNDM3ODI0IDAuOTU0NTcsLTAuMTYzMzc1IDEuNjQ1MjIsLTAuMDkyODIgMS45NTczMiwxLjA0OTkxOSB6IgogICAgIGlkPSJwYXRoNzItMyIKICAgICBzdHlsZT0ic3Ryb2tlLXdpZHRoOjAuMjY0NTgzIgogICAgIGlua3NjYXBlOmxhYmVsPSItIiAvPjxnCiAgICAgaWQ9ImcyOC04IgogICAgIGlua3NjYXBlOmxhYmVsPSJQUk8iPjxwYXRoCiAgICAgICBmaWxsPSIjZjlmN2ZhIgogICAgICAgb3BhY2l0eT0iMSIKICAgICAgIHN0cm9rZT0ibm9uZSIKICAgICAgIGQ9Im0gODguMzk2NTkzLDQ5LjAyMjMzOCBjIC0xLjQyMjQ2LDEuNzIxMDQgLTIuNTU2OCwzLjY2NzE1IC00LjIxNDIsNC45MjI5MSAtMi4yOTIyLDEuNzM2NzQgLTUuOTQxMTYsMS43MDc1MSAtNy4wNTYwNSwtMS45MTA5MSAtMS40MTU0MSwtNC41OTM3MiAtMC4yMzgzLC04Ljc0OTM3NSAyLjQyNTMsLTEyLjU3Mjk5NiAwLjY3MDU5LC0wLjk2MjYzNiAxLjQ4NDE3LC0xLjgyNTEzMyAyLjIyMzU2LC0yLjc0MDUwNCAwLjkzNTk1LC0xLjE1ODcxMyAyLjI1NjIxLC0xLjY5MTQ4MyAzLjYzMzg5LC0xLjc3MDE1MiAwLjYxNzgxLC0wLjAzNTI4IDEuNDY5NTYsMC41NjQ5MzYgMS44OTE4NywxLjEyMTkgMy4wNTI1MSw0LjAyNTg3NiAzLjY0OTgzLDguMzIwNjY2IDEuMDk1NjMsMTIuOTQ5NzUyIG0gLTMuOTcxNzgsLTExLjAwNjg0NiBjIC0yLjg3MTgxLDIuMTc0NjU4IC0zLjgzNDUsNS4xNjI1MzcgLTMuMzIxNDEsOC41NzYxOTQgMC4yMzc2MiwxLjU4MDkwMiAtMC4yMzk0MywxLjkyMzM1MiAtMS42MTIxLDEuNzI4NjEyIC0wLjA2NTUsLTAuMDA5IC0wLjE0NDExLDAuMDc0NCAtMC4yNzIyMSwwLjE0NTg3IDAsMC43MTM2MyAtMC4wNzU1LDEuNDYzODEgMC4wMTQ5LDIuMTkzNDcgMC4yMjU1NSwxLjgyMTc4IDEuMjgyNTUsMi40NzY5IDIuOTA5MTQsMS42MTA4NiAxLjE0MzE3LC0wLjYwODY2IDIuMzA5NSwtMS40Mjg4IDMuMDczMTUsLTIuNDQ4MzcgMi40NzI3OCwtMy4zMDE0NCAzLjM1MzQ5LC03LjQwMjgxOCAwLjk5NzQxLC0xMS4wNzQ1MDcgLTAuMzc3MzMsLTAuNTg4MDMxIC0wLjY5NjI4LC0xLjI3NzY2NSAtMS43ODg4NSwtMC43MzIxMjkgeiIKICAgICAgIGlkPSJwYXRoNjctNyIKICAgICAgIHN0eWxlPSJzdHJva2Utd2lkdGg6MC4yNjQ1ODMiCiAgICAgICBpbmtzY2FwZTpsYWJlbD0iTyIgLz48cGF0aAogICAgICAgZmlsbD0iI2Y5ZjhmYSIKICAgICAgIG9wYWNpdHk9IjEiCiAgICAgICBzdHJva2U9Im5vbmUiCiAgICAgICBkPSJtIDY0Ljc5NzkzMywzNi40NTc2NTUgYyAxLjE4NTI3LC0yLjAzNTE1OSAzLjUzNzc4LC0zLjA0NDExMSA2LjAzNTkzLC0yLjYzOTA0MiAxLjkxNjE0LDAuMzEwNjk4IDMuOTc2OTIsMi4xODU5NDMgNC4wMTMyOCw0LjI0NTY2MyAwLjAyMjYsMS4yNzg3MjQgLTAuNzQ1OTgsMi42MTIwODEgLTEuMzIyMzksMy44NDQ3MjEgLTAuMzIwNzgsMC42ODU5NzIgLTAuOTU1NzcsMS4yMzM5ODUgLTEuNDg1NTgsMS44MTA3MTEgLTAuNTI4OTUsMC41NzU3NyAtMS4xMDMzNSwxLjEwOTc3OSAtMS43MTUyMSwxLjcxOTI1NCAyLjY2NjQyLDIuNTc1NjY2IDQuMTY0OTEsNS44MTAwOTYgNS42ODExMyw5LjAyMzIyNiAwLjIzNDcyLDAuNDk3NDIgMS4yMDI3OCwxLjEzNDUgMC4wOTk5LDEuNzE2MDUgLTAuODQ1NDUsMC40NDU4IC0xLjcwMjczLC0wLjA2NzMgLTIuMTc1NTIsLTEuMDUxNjMgLTAuNjUwOTQsLTEuMzU1MjkgLTEuMzMwMjIsLTIuNzA1MjkgLTIuMTEyNjMsLTMuOTg3MiAtMS4yMTg5MywtMS45OTcxIC0yLjc5MDA3LC0zLjY3NjI3IC01LjA0Mzk2LC00LjkwNjE0OCAtMC4yNjc2LDIuMjYwMDM4IC0wLjU0ODIsNC40NjMxNTggLTAuNzc3NjcsNi42NzE1NzggLTAuMDY2OSwwLjY0MzY0IC0wLjAxNzgsMS4yMjA2MSAtMC45MzEyLDEuMjY5MzggLTAuOTc0MDUsMC4wNTIgLTEuNDE3NjgsLTAuNDc1MzUgLTEuNDM1NCwtMS4yOTQwMiAtMC4wMjA2LC0wLjk1MDU5IDAuMTg3NiwtMS45MDM3OSAwLjI0OTQ3LC0yLjg1ODkxIDAuMjkxMDUsLTQuNDkzMzg2IDAuNTY1OTcsLTguOTg3ODIxIDAuOTE5ODksLTEzLjU2MzYzMyBtIDYuMDk5MDIsNS4yNDQ4MDEgYyAwLjM3MjQ0LC0wLjYyOTk2OCAwLjkzOTQsLTEuMjIyNDU3IDEuMDY5NzUsLTEuODk5MDY2IDAuMTc2NDIsLTAuOTE1Njc4IDAuMzY0NzUsLTIuMTI1NTQ2IC0wLjA3ODIsLTIuNzk0NzUxIC0wLjY2ODY1LC0xLjAxMDIxNCAtMi4wMzA0OSwtMS4xNDcyNTcgLTMuMjE3NTUsLTAuNzQ2NzM0IC0xLjA3OTkyLDAuMzY0Mzc3IC0xLjQzNTI3LDEuMjgwNzkgLTEuNDE1NjEsMi4zODkwMjEgMC4wMjc4LDEuNTY0ODk0IDAuMDA3LDMuMTMwNjQ1IDAuMDA3LDQuOTY1Mjk4IDAuMjY3NDIsLTAuMDEyMzYgMC44MzgxMiwwLjEyNDA3NiAxLjIwNjk5LC0wLjA4ODk2IDAuODE1NjcsLTAuNDcxMDg4IDEuNTI5ODMsLTEuMTE3OTUyIDIuNDI3NTgsLTEuODI0ODA1IHoiCiAgICAgICBpZD0icGF0aDY2LTQiCiAgICAgICBzdHlsZT0ic3Ryb2tlLXdpZHRoOjAuMjY0NTgzIgogICAgICAgaW5rc2NhcGU6bGFiZWw9IlIiIC8+PHBhdGgKICAgICAgIGZpbGw9IiNmOGY2ZmEiCiAgICAgICBvcGFjaXR5PSIxIgogICAgICAgc3Ryb2tlPSJub25lIgogICAgICAgZD0ibSA1MC42NzA4NjMsNDIuNDg5NjMzIGMgLTAuMjk0NDI2LC0xLjgyMzI5NiAtMC41MDk4NDEsLTMuNTQ0NDggLTAuOTExOTQ1LC01LjIyMDg4MiAtMC4yNjk0OTEsLTEuMTIzNTI0IDAuMTcyMDU2LC0xLjY4NzM1NyAxLjA1MDg2NSwtMi4yMTcxMjYgMi41MzY0MjUsLTEuNTI5MDEyIDUuMTI3NDgsLTEuMTE2MDA1IDcuNjMwODMsLTAuMDkwOTcgMS4xNDkxMiwwLjQ3MDUyNyAyLjIxNjgyLDEuMzIzNTM4IDMuMTAxMzMsMi4yMjAyMjQgMi4xNTI2NSwyLjE4MjI5NCAxLjQ3NDA0LDMuNzQxMjk5IC0wLjU3MTI3LDUuODA4NDMzIC0xLjgxNTQyLDEuODM0NzgyIC00LjI1MDY2LDIuNDIwMjMzIC02LjY3NjI0NiwyLjk1OTczNSAtMC40MTM5MTksMC4wOTIwNyAtMC44MjE3NDgsMC4yMTE1MSAtMS4wMjE4MDIsMC4yNjM1MzggMCwyLjYzMzQ2MyAtMC4wMiw1LjEzNjQ0MyAwLjAxMjcsNy42Mzg3MzMgMC4wMDkzLDAuNzExNjIgLTAuMDM0NzksMS40OTE3NSAtMC44NTI3MDcsMS40MzUxMiAtMC41MTYxNzMsLTAuMDM1NyAtMS4zMjQwMjMsLTAuNjQwNzIgLTEuNDE1NjgsLTEuMTA1NzUgLTAuMjQ4ODA2LC0xLjI2MjI4IC0wLjI2NDQ0NiwtMi41ODgzNiAtMC4yMjYxNDcsLTMuODg0ODIgMC4wNDY5NCwtMS41ODg4NiAwLjU5MzE4LC0zLjIwMjc1NSAtMC41MTYxMzYsLTQuNjc0MTM1IC0wLjEyNTYzLC0wLjE2NjY0MiAwLjAxNTI5LC0wLjU0NjMwMSAwLjA1NTgsLTAuODIzODA0IDAuMTA2NTExLC0wLjczMDAzNSAwLjIyNTc5OCwtMS40NTgyMDggMC4zNDA0MSwtMi4zMDgyOTQgbSAyLjU5NDIxNCwxLjIzNzI5MyBjIDIuNDY3NzE0LC0wLjIxMDUyOSA0LjU5NDk5NCwtMS4xMTYyODUgNi4yNDI1MzQsLTMuMDI2MDg3IDAuODkxMDksLTEuMDMyOTQ3IDEuMDcyMDYsLTIuMDQ4NDQ0IDAuMzU1OTEsLTIuNTc5NTE2IC0xLjczODExLC0xLjI4ODkyNiAtMy43MjEyMywtMS44NDM4MzkgLTUuODY4NjUyLC0xLjY3MTM0OSAtMC43NjQwNTMsMC4wNjEzNyAtMS4zNjE5NDYsMC4zNzY4NyAtMS4yNDk1MTEsMS40Mjg4NjQgMC4yMDIzMTEsMS44OTI5OTYgMC4yNTU4NTUsMy44MDE4OTMgMC41MTk3MTksNS44NDgwODggeiIKICAgICAgIGlkPSJwYXRoNjktMiIKICAgICAgIHN0eWxlPSJzdHJva2Utd2lkdGg6MC4yNjQ1ODMiCiAgICAgICBpbmtzY2FwZTpsYWJlbD0iUCIgLz48L2c+PC9nPjwvc3ZnPgo=")
-const width = ref(200)
-const height = ref(200)
-const margin = ref(0)
-const imageMargin = ref(-20)
+watch(
+  () => props.initialData,
+  (newValue) => {
+    if (newValue) {
+      data.value = newValue
+    }
+  }
+)
 
-const dotsOptionsColor = ref("#ffffff")
-const dotsOptionsType = ref("classy-rounded")
-const cornersSquareOptionsColor = ref("#ffffff")
-const cornersSquareOptionsType = ref("dot")
-const cornersDotOptionsColor = ref("#ffffff")
-const cornersDotOptionsType = ref("dot")
-const styleBorderRadius = ref(12)
-const styledBorderRadiusFormatted = computed(() => `12px`)
-const styleBackground = ref("#55298a")
-const lastBackground = ref("#55298a")
+const dotsOptionsColor = ref()
+const dotsOptionsType = ref()
+const cornersSquareOptionsColor = ref()
+const cornersSquareOptionsType = ref()
+const cornersDotOptionsColor = ref()
+const cornersDotOptionsType = ref()
+const styleBorderRadius = ref()
+const styledBorderRadiusFormatted = computed(() => `${styleBorderRadius.value}px`)
+const styleBackground = ref(defaultPreset.style.background)
+const lastBackground = ref(defaultPreset.style.background)
 const includeBackground = ref(true)
 watch(
   includeBackground,
   (newIncludeBackground) => {
     if (!newIncludeBackground) {
       lastBackground.value = styleBackground.value
-      styleBackground.value = "transparent"
+      styleBackground.value = 'transparent'
     } else {
       styleBackground.value = lastBackground.value
     }
   },
-  { immediate: true }
+  {
+    immediate: true
+  }
 )
 
 const dotsOptions = computed(() => ({
@@ -92,7 +140,7 @@ const imageOptions = computed(() => ({
   margin: imageMargin.value
 }))
 const qrOptions = computed(() => ({
-  errorCorrectionLevel: "Q"
+  errorCorrectionLevel: errorCorrectionLevel.value
 }))
 
 const qrCodeProps = computed<StyledQRCodeProps>(() => ({
@@ -108,20 +156,200 @@ const qrCodeProps = computed<StyledQRCodeProps>(() => ({
   qrOptions: qrOptions.value
 }))
 
-// randomizeStyleSettings, uploadImage, and rest of your methods remain unchanged
+function randomizeStyleSettings() {
+  const dotTypes: DotType[] = [
+    'dots',
+    'rounded',
+    'classy',
+    'classy-rounded',
+    'square',
+    'extra-rounded'
+  ]
+  const cornerSquareTypes: CornerSquareType[] = ['dot', 'square', 'extra-rounded']
+  const cornerDotTypes: CornerDotType[] = ['dot', 'square']
+
+  dotsOptionsType.value = getRandomItemInArray(dotTypes)
+  dotsOptionsColor.value = createRandomColor()
+
+  cornersSquareOptionsType.value = getRandomItemInArray(cornerSquareTypes)
+  cornersSquareOptionsColor.value = createRandomColor()
+
+  cornersDotOptionsType.value = getRandomItemInArray(cornerDotTypes)
+  cornersDotOptionsColor.value = createRandomColor()
+
+  styleBackground.value = createRandomColor()
+}
+
+function uploadImage() {
+  console.debug('Uploading image')
+  const imageInput = document.createElement('input')
+  imageInput.type = 'file'
+  imageInput.accept = 'image/*'
+  imageInput.onchange = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    if (target.files) {
+      const file = target.files[0]
+      const reader = new FileReader()
+      reader.onload = (event: ProgressEvent<FileReader>) => {
+        const target = event.target as FileReader
+        const result = target.result as string
+        image.value = result
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+  imageInput.click()
+}
+// #endregion
+
+// #region /* Preset settings */
+const isPresetSelectOpen = ref(false)
+const allPresetOptions = computed(() => {
+  const options = lastCustomLoadedPreset.value
+    ? [lastCustomLoadedPreset.value, ...allQrCodePresets]
+    : allQrCodePresets
+  return options.map((preset) => ({ value: preset.name, label: t(preset.name) }))
+})
+const selectedPreset = ref<
+  Preset & { key?: string; qrOptions?: { errorCorrectionLevel: ErrorCorrectionLevel } }
+>(defaultPreset)
+watch(selectedPreset, () => {
+  // Only update data from preset if there's no initialData or if data is empty
+  if (!props.initialData || data.value === '') {
+    data.value = selectedPreset.value.data
+  }
+
+  image.value = selectedPreset.value.image
+  width.value = selectedPreset.value.width
+  height.value = selectedPreset.value.height
+  margin.value = selectedPreset.value.margin
+  imageMargin.value = selectedPreset.value.imageOptions.margin
+  dotsOptionsColor.value = selectedPreset.value.dotsOptions.color
+  dotsOptionsType.value = selectedPreset.value.dotsOptions.type
+  cornersSquareOptionsColor.value = selectedPreset.value.cornersSquareOptions.color
+  cornersSquareOptionsType.value = selectedPreset.value.cornersSquareOptions.type
+  cornersDotOptionsColor.value = selectedPreset.value.cornersDotOptions.color
+  cornersDotOptionsType.value = selectedPreset.value.cornersDotOptions.type
+  styleBorderRadius.value = getNumericCSSValue(selectedPreset.value.style.borderRadius as string)
+  styleBackground.value = selectedPreset.value.style.background
+  includeBackground.value = selectedPreset.value.style.background !== 'transparent'
+  errorCorrectionLevel.value =
+    selectedPreset.value.qrOptions && selectedPreset.value.qrOptions.errorCorrectionLevel
+      ? selectedPreset.value.qrOptions.errorCorrectionLevel
+      : 'Q'
+  // Most presets don't have a frame, so we set it to false by default
+})
+
+const LAST_LOADED_LOCALLY_PRESET_KEY = 'Last saved locally'
+const LOADED_FROM_FILE_PRESET_KEY = 'Loaded from file'
+const CUSTOM_LOADED_PRESET_KEYS = [LAST_LOADED_LOCALLY_PRESET_KEY, LOADED_FROM_FILE_PRESET_KEY]
+const selectedPresetKey = ref<string>(
+  import.meta.env.VITE_DISABLE_LOCAL_STORAGE === 'true'
+    ? defaultPreset.name
+    : localStorage.getItem('qrCodeConfig')
+      ? LAST_LOADED_LOCALLY_PRESET_KEY
+      : defaultPreset.name
+)
+const lastCustomLoadedPreset = ref<Preset>()
+watch(
+  selectedPresetKey,
+  (newKey, prevKey) => {
+    if (newKey === prevKey || !newKey) return
+
+    if (
+      import.meta.env.VITE_DISABLE_LOCAL_STORAGE !== 'true' &&
+      CUSTOM_LOADED_PRESET_KEYS.includes(newKey) &&
+      lastCustomLoadedPreset.value
+    ) {
+      selectedPreset.value = lastCustomLoadedPreset.value
+      return
+    }
+
+    const updatedPreset = allQrCodePresets.find((preset) => preset.name === newKey)
+    if (updatedPreset) {
+      selectedPreset.value = updatedPreset
+    }
+  },
+  { immediate: true }
+)
+//#endregion
+
+//#region /* Error correction level */
+const errorCorrectionLevels: ErrorCorrectionLevel[] = ['L', 'M', 'Q', 'H']
+const errorCorrectionLevel = ref<ErrorCorrectionLevel>('Q')
+const ERROR_CORRECTION_LEVEL_LABELS: Record<ErrorCorrectionLevel, string> = {
+  L: `Low (7%)`,
+  M: `Medium (15%)`,
+  Q: `High (25%)`,
+  H: `Highest (30%)`
+}
+const recommendedErrorCorrectionLevel = computed<ErrorCorrectionLevel | null>(() => {
+  if (!data.value) return null
+  if (data.value.length <= 50) {
+    return 'H'
+  } else if (data.value.length <= 150) {
+    return 'Q'
+  } else if (data.value.length <= 500) {
+    return 'M'
+  } else {
+    return 'L'
+  }
+})
+//#endregion
 
 //#region /* Frame settings */
-const frameText = ref("Scan for more info")
+const DEFAULT_FRAME_TEXT = 'Scan for more info'
+const frameText = ref(DEFAULT_FRAME_TEXT)
 const frameTextPosition = ref<'top' | 'bottom' | 'left' | 'right'>('bottom')
-const showFrame = ref(true)
+const showFrame = ref(false)
 const frameStyle = ref<FrameStyle>({
-  textColor: "#000000",
-  backgroundColor: "#ffffff",
-  borderColor: "#000000",
-  borderWidth: "1px",
-  borderRadius: "8px",
-  padding: "16px"
+  textColor: '#000000',
+  backgroundColor: '#ffffff',
+  borderColor: '#000000',
+  borderWidth: '1px',
+  borderRadius: '8px',
+  padding: '16px'
 })
+const selectedFramePresetKey = ref<string>(defaultFramePreset.name)
+const lastCustomLoadedFramePreset = ref<FramePreset>()
+const CUSTOM_LOADED_FRAME_PRESET_KEYS = [
+  LAST_LOADED_LOCALLY_PRESET_KEY,
+  LOADED_FROM_FILE_PRESET_KEY
+]
+const allFramePresetOptions = computed(() => {
+  const options = lastCustomLoadedFramePreset.value
+    ? [lastCustomLoadedFramePreset.value, ...allFramePresets]
+    : allFramePresets
+  return options.map((preset) => ({ value: preset.name, label: t(preset.name) }))
+})
+function applyFramePreset(preset: FramePreset) {
+  if (preset.style) {
+    frameStyle.value = { ...frameStyle.value, ...preset.style }
+  }
+  if (preset.text) frameText.value = preset.text
+  if (preset.position) frameTextPosition.value = preset.position
+}
+watch(
+  selectedFramePresetKey,
+  (newKey, prevKey) => {
+    if (newKey === prevKey || !newKey) return
+
+    if (
+      import.meta.env.VITE_DISABLE_LOCAL_STORAGE !== 'true' &&
+      CUSTOM_LOADED_FRAME_PRESET_KEYS.includes(newKey) &&
+      lastCustomLoadedFramePreset.value
+    ) {
+      applyFramePreset(lastCustomLoadedFramePreset.value)
+      return
+    }
+
+    const preset = allFramePresets.find((p) => p.name === newKey)
+    if (preset) {
+      applyFramePreset(preset)
+    }
+  },
+  { immediate: true }
+)
 const frameSettings = computed(() => ({
   text: frameText.value,
   position: frameTextPosition.value,
@@ -129,7 +357,575 @@ const frameSettings = computed(() => ({
 }))
 //#endregion
 
-// ...rest of your script remains unchanged...
+//#region /* General Export - download qr code and copy to clipboard */
+const isExportButtonDisabled = computed(() => {
+  if (exportMode.value === ExportMode.Single) {
+    return !data.value
+  }
+  return dataStringsFromCsv.value.length === 0
+})
+
+const PREVIEW_QRCODE_DIM_UNIT = 200
+
+/**
+ * Calculates the dimensions for QR code export
+ * When frame is enabled (showFrame = true), dimensions are calculated from the actual rendered element
+ * to include the frame's size. Otherwise, uses the configured width and height values.
+ */
+function getExportDimensions() {
+  if (!showFrame.value) {
+    return {
+      width: width.value,
+      height: height.value
+    }
+  }
+  const el = document.getElementById('element-to-export')
+  if (!el) {
+    return {
+      width: width.value,
+      height: height.value
+    }
+  }
+
+  // Calculate the scale factor based on the preview size
+  const scaleFactor = width.value / PREVIEW_QRCODE_DIM_UNIT
+
+  const elWidth = el.offsetWidth
+  const elHeight = el.offsetHeight
+
+  // Get the actual dimensions including the frame and apply the scale factor
+  return {
+    width: elWidth * scaleFactor,
+    height: elHeight * scaleFactor
+  }
+}
+
+// #region Copy image modal (Safari fallback)
+const showSafariCopyImageModal = ref(false)
+const copyModalIsLoading = ref(false)
+const copyModalImageSrc = ref<string | null>(null)
+
+async function openCopyModal() {
+  const el = document.getElementById('element-to-export')
+  if (!el) return
+  copyModalIsLoading.value = true
+  try {
+    copyModalImageSrc.value = await getPngElement(
+      el,
+      getExportDimensions(),
+      styledBorderRadiusFormatted.value
+    )
+    showSafariCopyImageModal.value = true
+  } catch (error) {
+    console.error('Error preparing image for copy modal:', error)
+  } finally {
+    copyModalIsLoading.value = false
+  }
+}
+
+function closeCopyModal() {
+  showSafariCopyImageModal.value = false
+  copyModalImageSrc.value = null
+}
+// #endregion
+
+function copyQRToClipboard() {
+  const el = document.getElementById('element-to-export')
+  if (!el) {
+    return
+  }
+  if (IS_COPY_IMAGE_TO_CLIPBOARD_SUPPORTED) {
+    copyImageToClipboard(el, getExportDimensions(), styledBorderRadiusFormatted.value)
+  } else if (!isLikelyMobileDevice.value) {
+    // for now we only open the copy image modal on safari desktop because
+    // this modal will be hidden behind the export image modal on mobile viewport.
+    openCopyModal()
+  }
+}
+
+/**
+ * Downloads QR code in specified format, handling both single and batch exports
+ * @param format The format to download: 'png', 'svg', or 'jpg'
+ */
+function downloadQRImage(format: 'png' | 'svg' | 'jpg') {
+  if (exportMode.value === ExportMode.Single) {
+    const formatConfig = {
+      png: { fn: downloadPngElement, filename: 'qr-code.png' },
+      svg: { fn: downloadSvgElement, filename: 'qr-code.svg' },
+      jpg: { fn: downloadJpgElement, filename: 'qr-code.jpg', extraOptions: { bgcolor: 'white' } }
+    }[format]
+
+    const el = document.getElementById('element-to-export')
+    if (!el) {
+      return
+    }
+
+    formatConfig.fn(
+      el,
+      formatConfig.filename,
+      { ...getExportDimensions(), ...formatConfig.extraOptions },
+      styledBorderRadiusFormatted.value
+    )
+  } else {
+    generateBatchQRCodes(format)
+  }
+}
+//#endregion
+
+//#region /* QR Config Utils - Saving, Loading and Downloading */
+interface QRCodeConfig {
+  props: StyledQRCodeProps & {
+    name?: string
+  }
+  style: {
+    borderRadius: string
+    background?: string
+  }
+  frame?: {
+    text: string
+    position: 'top' | 'bottom' | 'left' | 'right'
+    style: FrameStyle
+  } | null
+}
+
+function createQrConfig(): QRCodeConfig {
+  return {
+    props: qrCodeProps.value,
+    style: style.value,
+    frame: showFrame.value ? frameSettings.value : null
+  }
+}
+
+function downloadQRConfig() {
+  console.debug('Downloading QR code config')
+  const qrCodeConfig = createQrConfig()
+  const qrCodeConfigString = JSON.stringify(qrCodeConfig)
+  const qrCodeConfigBlob = new Blob([qrCodeConfigString], { type: 'application/json' })
+  const qrCodeConfigUrl = URL.createObjectURL(qrCodeConfigBlob)
+  const qrCodeConfigLink = document.createElement('a')
+  qrCodeConfigLink.href = qrCodeConfigUrl
+  qrCodeConfigLink.download = 'qr-code-config.json'
+  qrCodeConfigLink.click()
+}
+
+function saveQRConfigToLocalStorage() {
+  const qrCodeConfig = createQrConfig()
+  const qrCodeConfigString = JSON.stringify(qrCodeConfig)
+  localStorage.setItem('qrCodeConfig', qrCodeConfigString)
+}
+
+function loadQRConfig(jsonString: string, key?: string) {
+  const qrCodeConfig = JSON.parse(jsonString) as QRCodeConfig
+  const qrCodeProps = qrCodeConfig.props
+  const qrCodeStyle = qrCodeConfig.style
+  const frameConfig = qrCodeConfig.frame
+
+  const preset = {
+    ...qrCodeProps,
+    style: qrCodeStyle
+  } as Preset
+
+  if (key) {
+    preset.name = key
+    lastCustomLoadedPreset.value = preset
+    selectedPresetKey.value = key
+  }
+
+  let framePreset: FramePreset | undefined
+
+  selectedPreset.value = preset
+
+  if (frameConfig) {
+    showFrame.value = true
+    frameText.value = frameConfig.text || DEFAULT_FRAME_TEXT
+    frameTextPosition.value = frameConfig.position || 'bottom'
+    frameStyle.value = {
+      ...frameStyle.value,
+      ...frameConfig.style
+    }
+    framePreset = {
+      name: key || LAST_LOADED_LOCALLY_PRESET_KEY,
+      style: frameConfig.style,
+      text: frameConfig.text,
+      position: frameConfig.position
+    }
+  }
+
+  if (framePreset && key) {
+    lastCustomLoadedFramePreset.value = framePreset
+    selectedFramePresetKey.value = key
+  }
+}
+
+function loadQrConfigFromFile() {
+  console.debug('Loading QR code config')
+  const qrCodeConfigInput = document.createElement('input')
+  qrCodeConfigInput.type = 'file'
+  qrCodeConfigInput.accept = 'application/json'
+  qrCodeConfigInput.onchange = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    if (target.files) {
+      const file = target.files[0]
+      const reader = new FileReader()
+      reader.onload = (event: ProgressEvent<FileReader>) => {
+        const target = event.target as FileReader
+        const result = target.result as string
+        loadQRConfig(result, LOADED_FROM_FILE_PRESET_KEY)
+      }
+      reader.readAsText(file)
+    }
+  }
+  qrCodeConfigInput.click()
+}
+
+function loadQRConfigFromLocalStorage() {
+  const qrCodeConfigString = localStorage.getItem('qrCodeConfig')
+  if (qrCodeConfigString) {
+    console.debug('Loading QR code config from local storage')
+    loadQRConfig(qrCodeConfigString, LAST_LOADED_LOCALLY_PRESET_KEY)
+  } else {
+    selectedPreset.value = { ...defaultPreset }
+  }
+}
+
+watch(
+  [qrCodeProps, style, showFrame, frameSettings],
+  () => {
+    saveQRConfigToLocalStorage()
+  },
+  {
+    deep: true
+  }
+)
+
+onMounted(() => {
+  if (import.meta.env.VITE_DISABLE_LOCAL_STORAGE !== 'true') {
+    const qrCodeConfigString = localStorage.getItem('qrCodeConfig')
+    if (qrCodeConfigString) {
+      loadQRConfig(qrCodeConfigString, LAST_LOADED_LOCALLY_PRESET_KEY)
+    } else {
+      // No localStorage data found, use the environment variable default preset
+      selectedPreset.value = { ...defaultPreset }
+      selectedPresetKey.value = defaultPreset.name
+    }
+    // No separate frameConfig loading from localStorage noted,
+    // assuming selectedFramePresetKey watcher handles it if lastCustomLoadedFramePreset was populated by loadQRConfig
+  }
+
+  // Set initial data if provided through props
+  if (props.initialData) {
+    data.value = props.initialData
+  }
+})
+//#endregion
+
+//#region /* Batch QR Code Generation */
+enum ExportMode {
+  Single = 'single',
+  Batch = 'batch'
+}
+
+const exportMode = ref(ExportMode.Single)
+const dataStringsFromCsv = ref<string[]>([])
+const frameTextsFromCsv = ref<string[]>([])
+
+const inputFileForBatchEncoding = ref<File | null>(null)
+const fileInput = ref<HTMLInputElement | null>(null)
+const isValidCsv = ref(true)
+
+const isExportingBatchQRs = ref(false)
+const isBatchExportSuccess = ref(false)
+const currentExportedQrCodeIndex = ref<number | null>(null)
+
+const parsedCsvResult = ref<{ data: any[] } | null>(null)
+const previewRowIndex = ref(0)
+const previewRow = computed(() => {
+  const idx = previewRowIndex.value
+  if (dataStringsFromCsv.value.length === 0) return null
+  if (idx < 0 || idx >= dataStringsFromCsv.value.length) return null
+  if (
+    parsedCsvResult.value &&
+    parsedCsvResult.value.data &&
+    parsedCsvResult.value.data.length > idx
+  ) {
+    return parsedCsvResult.value.data[idx]
+  }
+  return null
+})
+
+const resetBatchExportProgress = () => {
+  isExportingBatchQRs.value = false
+  currentExportedQrCodeIndex.value = null
+  usedFilenames.clear()
+}
+
+const resetData = () => {
+  data.value = ''
+  inputFileForBatchEncoding.value = null
+  dataStringsFromCsv.value = []
+  frameTextsFromCsv.value = []
+  isValidCsv.value = true
+  resetBatchExportProgress()
+  isBatchExportSuccess.value = false
+}
+
+watch(exportMode, () => {
+  resetData()
+})
+
+const getFileFromInputEvent = (event: InputEvent) => {
+  const inputElement = event.target as HTMLInputElement
+  if (inputElement.files && inputElement.files.length > 0) {
+    return inputElement.files[0]
+  }
+  return null
+}
+
+const onBatchInputFileUpload = (event: Event) => {
+  isBatchExportSuccess.value = false
+  let file: File | null = getFileFromInputEvent(event as InputEvent)
+
+  // If it is not input event, then it might be a drag and drop event
+  if (file == null) {
+    const dt = (event as DragEvent).dataTransfer
+    if (!dt || !dt.files || dt.files.length === 0) {
+      return
+    }
+    file = dt.files[0]
+  }
+
+  inputFileForBatchEncoding.value = file
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    const content = e.target?.result
+    if (typeof content !== 'string') {
+      isValidCsv.value = false
+      return
+    }
+
+    const result = parseCSV(content)
+    parsedCsvResult.value = result
+    if (!result.isValid) {
+      isValidCsv.value = false
+      return
+    }
+
+    if (!validateCSVData(result.data)) {
+      isValidCsv.value = false
+      return
+    }
+
+    const urls: string[] = []
+    const frameTexts: string[] = []
+
+    result.data.forEach((row) => {
+      const isVCard = 'firstName' in row
+      if (isVCard) {
+        // Handle vCard data
+        const vCardString = generateVCardData({
+          firstName: row.firstName,
+          lastName: row.lastName,
+          org: row.org,
+          position: row.position,
+          phoneWork: row.phonework,
+          phonePrivate: row.phoneprivate,
+          phoneMobile: row.phonemobile,
+          email: row.email,
+          website: row.website,
+          street: row.street,
+          zipcode: row.zipcode,
+          city: row.city,
+          state: row.state,
+          country: row.country,
+          version: row.version
+        })
+        urls.push(vCardString)
+      } else {
+        // Handle simple URL/text data
+        urls.push(row.url)
+      }
+
+      if (row.frameText) {
+        frameTexts.push(row.frameText)
+      }
+    })
+
+    // If any non-default frame text is detected, enable frame settings
+    const hasCustomFrameText = frameTexts.length > 0
+    showFrame.value = hasCustomFrameText
+
+    dataStringsFromCsv.value = urls
+    frameTextsFromCsv.value = frameTexts
+    isValidCsv.value = true
+    previewRowIndex.value = 0 // Reset preview to first row on new upload
+  }
+
+  reader.readAsText(file)
+}
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+const usedFilenames = new Set() // zip folders cannot have duplicate filenames, otherwise they override each other
+const createZipFile = (
+  zip: typeof JSZip,
+  dataUrl: string,
+  index: number,
+  format: 'png' | 'svg' | 'jpg'
+) => {
+  const dataString = dataStringsFromCsv.value[index]
+  const frameText = frameTextsFromCsv.value[index]
+  let fileName = ''
+
+  // If frame text is provided, use it as the filename
+  if (frameText) {
+    fileName = frameText
+  } else {
+    // For vCard data, use firstName_lastName
+    if (dataString.startsWith('BEGIN:VCARD')) {
+      const match = dataString.match(/FN:([^\r\n]+)/)
+      if (match) {
+        const fullName = match[1].trim()
+        fileName = fullName.replace(/\s+/g, '_')
+      }
+    } else {
+      // For simple URL/text, use the data string
+      if (dataString.startsWith('http')) {
+        const pathSegments = dataString.split('/')
+        const lastPathSegment = pathSegments[pathSegments.length - 1]
+        // Check if lastPathSegment is only alphanumeric or underscores
+        const isValidFileName = /^[a-zA-Z0-9_]+$/.test(lastPathSegment)
+        fileName = isValidFileName
+          ? lastPathSegment
+          : pathSegments[pathSegments.length - 2] || `qr_code_${index}`
+      } else {
+        fileName = dataString.trim()
+      }
+    }
+  }
+
+  // Sanitize filename to remove invalid characters
+  fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_')
+
+  // Ensure unique filenames
+  if (usedFilenames.has(fileName)) {
+    fileName = `${fileName}-${index}`
+  }
+
+  usedFilenames.add(fileName)
+
+  if (format === 'png' || format === 'jpg') {
+    zip.file(`${fileName}.${format}`, dataUrl.split(',')[1], { base64: true })
+  } else {
+    // For SVG, we don't need to split and use base64
+    zip.file(`${fileName}.${format}`, dataUrl)
+  }
+}
+async function generateBatchQRCodes(format: 'png' | 'svg' | 'jpg') {
+  isExportingBatchQRs.value = true
+  const zip = new JSZip()
+  let numQrCodesCreated = 0
+  const el = document.getElementById('element-to-export')
+  if (!el) {
+    return
+  }
+
+  try {
+    for (let index = 0; index < dataStringsFromCsv.value.length; index++) {
+      currentExportedQrCodeIndex.value = index
+      const url = dataStringsFromCsv.value[index]
+      const currentFrameText = frameTextsFromCsv.value[index]
+      data.value = url
+      frameText.value = currentFrameText
+      await sleep(1000)
+      let dataUrl: string = ''
+      if (format === 'png') {
+        dataUrl = await getPngElement(el, getExportDimensions(), styledBorderRadiusFormatted.value)
+      } else if (format === 'jpg') {
+        dataUrl = await getJpgElement(el, getExportDimensions(), styledBorderRadiusFormatted.value)
+      } else {
+        dataUrl = await getSvgString(el, getExportDimensions(), styledBorderRadiusFormatted.value)
+      }
+      createZipFile(zip, dataUrl, index, format)
+      numQrCodesCreated++
+    }
+
+    while (numQrCodesCreated !== dataStringsFromCsv.value.length) {
+      await sleep(100)
+    }
+
+    zip.generateAsync({ type: 'blob' }).then((content) => {
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(content)
+      link.download = `qr-codes.zip`
+      link.click()
+      isBatchExportSuccess.value = true
+    })
+  } catch (error) {
+    console.error('Error generating batch QR codes', error)
+    isBatchExportSuccess.value = false
+  } finally {
+    resetBatchExportProgress()
+  }
+}
+// #endregion
+
+//#region /* Data modal */
+const isDataModalVisible = ref(false)
+const openDataModal = () => {
+  isDataModalVisible.value = true
+}
+
+const closeDataModal = () => {
+  isDataModalVisible.value = false
+}
+
+const updateDataFromModal = (newData: string) => {
+  data.value = newData
+  // Optionally trigger QR code regeneration here if needed
+}
+// #endregion
+
+//#region /* Dynamic padding for mobile drawer */
+const drawerTriggerHeight = ref(0)
+const BUFFER_PADDING = 20 // Extra space below the drawer trigger
+
+function updateDrawerTriggerHeight() {
+  nextTick(() => {
+    const el = document.getElementById('drawer-preview-container')
+    if (el) {
+      drawerTriggerHeight.value = el.offsetHeight
+    } else {
+      drawerTriggerHeight.value = 0 // Fallback if element not found
+    }
+  })
+}
+
+watch(
+  isLarge,
+  (newIsLarge) => {
+    if (!newIsLarge) {
+      updateDrawerTriggerHeight() // Drawer is now visible
+    } else {
+      drawerTriggerHeight.value = 0 // Drawer is hidden, reset padding effect
+    }
+  },
+  { immediate: true } // Run on initial load
+)
+
+// Watch for changes that might affect the drawer trigger's height
+watch(showFrame, () => {
+  if (!isLarge.value) {
+    updateDrawerTriggerHeight()
+  }
+})
+
+const mainDivPaddingStyle = computed(() => {
+  if (!isLarge.value && drawerTriggerHeight.value > 0) {
+    return { paddingBottom: `${drawerTriggerHeight.value + BUFFER_PADDING}px` }
+  }
+  return { paddingBottom: '0px' } // Default for large screens or if height is 0
+})
+//#endregion
 </script>
 
 <template>
